@@ -27,7 +27,7 @@ class User(
     @ManyToOne @JoinColumn(name = "permission_set_id") var permissions: PermissionSet,
 
     @OneToMany(mappedBy = "user")
-    var comments: Collection<Comment>,
+    var comments: MutableCollection<Comment>,
     @OneToMany(mappedBy = "user")
-    var ratings: Collection<Rating>,
+    var ratings: MutableCollection<Rating>,
 ) : Serializable
