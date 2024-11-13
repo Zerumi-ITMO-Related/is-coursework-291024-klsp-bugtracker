@@ -32,7 +32,7 @@ class Comment(
     @ManyToOne @JoinColumn(name = "parent_comment", nullable = true) var parentComment: Comment?,
     @Column(name = "content") var content: String,
 
-    @OneToMany(mappedBy = "parentComment") var subThread: Collection<Comment>,
-    @OneToMany(mappedBy = "relatedComment") var attachedFiles: Collection<File>,
-    @OneToMany(mappedBy = "comment") var ratings: Collection<Rating>,
+    @OneToMany(mappedBy = "parentComment") var subThread: MutableCollection<Comment>,
+    @OneToMany(mappedBy = "relatedComment") var attachedFiles: MutableCollection<File>,
+    @OneToMany(mappedBy = "comment") var ratings: MutableCollection<Rating>,
 ) : Serializable

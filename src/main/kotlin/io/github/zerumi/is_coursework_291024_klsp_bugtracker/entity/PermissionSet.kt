@@ -28,6 +28,6 @@ import java.io.Serializable
 class PermissionSet(
     @Id @GeneratedValue @Column(name = "permission_set_id") var id: Long? = null,
     @Column(name = "permission_set_name") var name: String,
-    @OneToMany(mappedBy = "permissions") var assignedUsers: Collection<User>
+    @OneToMany(mappedBy = "permissions") var assignedUsers: MutableCollection<User>
     // permissions
 ) : Serializable
