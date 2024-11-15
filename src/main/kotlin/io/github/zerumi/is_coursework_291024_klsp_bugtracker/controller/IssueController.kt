@@ -1,6 +1,8 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.controller
 
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.annotation.RequirePermission
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.*
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Permissions
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.IssueService
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.web.bind.annotation.*
@@ -15,8 +17,9 @@ class IssueController(val issueService: IssueService) {
     }
 
     @PostMapping("/newIssue")
+    @RequirePermission(Permissions.CREATE_ISSUE)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun submitIssue(issueModelDTO: IssueRequestDTO) {
+    fun submitIssue(@RequestBody issueModelDTO: IssueRequestDTO) {
         return issueService.openIssue(issueModelDTO)
     }
 }
