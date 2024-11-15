@@ -16,10 +16,22 @@ class IssueController(val issueService: IssueService) {
         return issues.map { toDTO(it) }
     }
 
-    @PostMapping("/newIssue")
+    @PostMapping
     @RequirePermission(Permissions.CREATE_ISSUE)
     @SecurityRequirement(name = "Bearer Authentication")
     fun submitIssue(@RequestBody issueModelDTO: IssueRequestDTO) {
         return issueService.openIssue(issueModelDTO)
+    }
+
+    @PutMapping
+    @SecurityRequirement(name = "Bearer Authentication")
+    fun updateIssue(@RequestBody issueDTO: IssueDTO) {
+        return issueService.updateIssue(issueDTO)
+    }
+
+    @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Bearer Authentication")
+    fun deleteIssueById(id: Long) {
+        return issueService.deleteIssue(id)
     }
 }
