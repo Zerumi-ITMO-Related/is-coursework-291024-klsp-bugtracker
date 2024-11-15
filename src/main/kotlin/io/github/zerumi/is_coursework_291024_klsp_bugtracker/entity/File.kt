@@ -21,5 +21,5 @@ class File(
     @Column(name = "file_path") var filepath: String,
     @Column(name = "file_mime_type") var mimeType: String,
     @Column(name = "file_upload_time") var uploadTime: ZonedDateTime,
-    @ManyToOne @JoinColumn(name = "related_comment_id", nullable = true) var relatedComment: Comment?
+    @ManyToOne @JoinColumn(name = "related_comment_id", nullable = true) var relatedComment: Comment? = null
 ) : Serializable

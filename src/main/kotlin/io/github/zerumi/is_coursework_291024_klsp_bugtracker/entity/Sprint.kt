@@ -26,5 +26,5 @@ class Sprint(
     @Column(name = "sprint_deadline") var deadline: ZonedDateTime,
     @ManyToOne @JoinColumn(name = "epic_id") var relatedEpic: Epic,
 
-    @OneToMany(mappedBy = "relatedSprint") var issues: MutableCollection<Issue>
+    @OneToMany(mappedBy = "relatedSprint") var issues: MutableCollection<Issue> = mutableListOf()
 ) : Serializable

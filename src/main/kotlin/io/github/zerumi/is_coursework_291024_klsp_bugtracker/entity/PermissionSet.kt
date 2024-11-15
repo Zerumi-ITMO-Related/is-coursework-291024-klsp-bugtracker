@@ -1,25 +1,15 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity
 
 import jakarta.persistence.*
+import org.springframework.security.core.GrantedAuthority
 import java.io.Serializable
+import kotlin.reflect.jvm.internal.impl.renderer.DescriptorRenderer.ValueParametersHandler.DEFAULT
 
 /*
     CREATE TABLE PermissionSet (
         permission_set_id BIGSERIAL PRIMARY KEY,
         permission_set_name TEXT NOT NULL,
-        can_create_issue BOOLEAN NOT NULL,
-        can_edit_issue BOOLEAN NOT NULL,
-        can_delete_issue BOOLEAN NOT NULL,
-        can_change_role BOOLEAN NOT NULL,
-        can_create_sprint BOOLEAN NOT NULL,
-        can_edit_sprint BOOLEAN NOT NULL,
-        can_delete_sprint BOOLEAN NOT NULL,
-        can_create_epic BOOLEAN NOT NULL,
-        can_edit_epic BOOLEAN NOT NULL,
-        can_delete_epic BOOLEAN NOT NULL,
-        can_create_event BOOLEAN NOT NULL,
-        can_edit_event BOOLEAN NOT NULL,
-        can_delete_event BOOLEAN NOT NULL
+        permission_set BIGINT NOT NULL,
     );
  */
 
@@ -27,7 +17,32 @@ import java.io.Serializable
 @Table(name = "CoursePermissionSet", schema = "s367837")
 class PermissionSet(
     @Id @GeneratedValue @Column(name = "permission_set_id") var id: Long? = null,
-    @Column(name = "permission_set_name") var name: String,
-    @OneToMany(mappedBy = "permissions") var assignedUsers: MutableCollection<User>
+    @Column(name = "permission_set_name", unique = true) var name: String,
+    @OneToMany(mappedBy = "permissions") var assignedUsers: MutableCollection<User> = mutableListOf(),
     // permissions
-) : Serializable
+    @Column(name = "permission_set") var permissions: ULong,
+) : GrantedAuthority, Serializable {
+    override fun getAuthority(): String = name
+}
+
+enum class Permissions {
+    PERMISSION_EDIT_PERMISSIONS, PERMISSION_EDIT_COMMENTS,
+    // continue permission set
+    ;
+
+    private val value: ULong = Permissions.nextValue
+
+    infix fun ULong.or(other: Permissions) = this or other.value
+    infix fun ULong.and(other: Permissions) = this and other.value
+    infix fun or(other: Permissions) = this.value or other.value
+    infix fun and(other: Permissions) = this.value and other.value
+
+    companion object {
+        private var nextValue: ULong = 1u/*
+        get() {
+            field *= 2u
+            return field
+        }
+            */
+    }
+}

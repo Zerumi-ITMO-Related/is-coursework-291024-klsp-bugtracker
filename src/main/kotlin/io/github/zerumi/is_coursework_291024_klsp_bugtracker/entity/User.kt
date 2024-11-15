@@ -1,6 +1,8 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity
 
 import jakarta.persistence.*
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.io.Serializable
 
 /*
@@ -22,12 +24,14 @@ class User(
     @Id @GeneratedValue @Column(name = "user_id") var id: Long? = null,
     @Column(name = "display_name") var displayName: String,
     @Column(name = "login") var login: String,
-    @Column(name = "password") var password: String,
-    @OneToOne @JoinColumn(name = "avatar_file_id") var avatar: File,
+    @Column(name = "password") var pass: String,
+    @OneToOne @JoinColumn(name = "avatar_file_id") var avatar: File? = null,
     @ManyToOne @JoinColumn(name = "permission_set_id") var permissions: PermissionSet,
 
-    @OneToMany(mappedBy = "user")
-    var comments: MutableCollection<Comment>,
-    @OneToMany(mappedBy = "user")
-    var ratings: MutableCollection<Rating>,
-) : Serializable
+    @OneToMany(mappedBy = "user") var comments: MutableCollection<Comment> = mutableListOf(),
+    @OneToMany(mappedBy = "user") var ratings: MutableCollection<Rating> = mutableListOf(),
+) : UserDetails, Serializable {
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf(permissions)
+    override fun getPassword(): String = pass
+    override fun getUsername(): String = login
+}

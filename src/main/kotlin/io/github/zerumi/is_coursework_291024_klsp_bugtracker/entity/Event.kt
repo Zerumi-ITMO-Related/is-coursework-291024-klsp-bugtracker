@@ -34,5 +34,5 @@ class Event(
         name = "CourseEventIssue",
         joinColumns = [JoinColumn(name = "event_id")],
         inverseJoinColumns = [JoinColumn(name = "issue_id")],
-    ) var issues: MutableCollection<Issue>,
+    ) var issues: MutableCollection<Issue> = mutableListOf(),
 ) : Serializable
