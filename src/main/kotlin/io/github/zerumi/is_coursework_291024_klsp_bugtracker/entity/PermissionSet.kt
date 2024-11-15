@@ -1,9 +1,9 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity
 
 import jakarta.persistence.*
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.GrantedAuthority
 import java.io.Serializable
-import kotlin.reflect.jvm.internal.impl.renderer.DescriptorRenderer.ValueParametersHandler.DEFAULT
 
 /*
     CREATE TABLE PermissionSet (
@@ -25,8 +25,23 @@ class PermissionSet(
     override fun getAuthority(): String = name
 }
 
+/**
+ * Returns `true` if `testPermission` contains in `permissions`, otherwise `false`
+ *
+ * @author Zerumi
+ * @since 1.0
+ */
+fun checkPermission(permissions: ULong, testPermission: Permissions): Boolean =
+    testPermission and permissions != 0.toULong()
+
+fun requireOwnership(userId: Long, testObjUserId: Long, orElse: () -> Unit) =
+    if (userId != testObjUserId) orElse() else Unit
+
+fun requirePermissions(permissions: ULong, testPermissions: ULong) =
+    if (testPermissions and permissions == 0.toULong()) throw AccessDeniedException("Permission denied") else Unit
+
 enum class Permissions {
-    EDIT_PERMISSIONS, CREATE_ISSUE,
+    PRIVILEGED, CREATE_ISSUE, EDIT_ANY_ISSUE,
     // continue permission set
     ;
 

@@ -13,7 +13,7 @@ class DefaultPermissionSet(
     companion object {
         private const val DEFAULT_PERMISSIONS_NAME = "default"
         private val DEFAULT_PERMISSIONS =
-            Permissions.EDIT_PERMISSIONS or Permissions.CREATE_ISSUE
+            Permissions.CREATE_ISSUE or Permissions.CREATE_ISSUE
 
         lateinit var DEFAULT_PERMISSION_SET: PermissionSet
             private set
