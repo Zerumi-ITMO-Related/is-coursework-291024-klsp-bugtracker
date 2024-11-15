@@ -21,5 +21,5 @@ class Epic(
     @Column(name = "epic_description") var description: String,
     @Column(name = "epic_deadline") var deadline: ZonedDateTime,
 
-    @OneToMany(mappedBy = "relatedEpic") var sprints: MutableCollection<Sprint>
+    @OneToMany(mappedBy = "relatedEpic") var sprints: MutableCollection<Sprint> = mutableListOf()
 ) : Serializable

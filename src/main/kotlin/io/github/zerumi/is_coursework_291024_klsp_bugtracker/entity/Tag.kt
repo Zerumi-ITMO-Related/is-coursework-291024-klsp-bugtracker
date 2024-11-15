@@ -25,5 +25,5 @@ class Tag(
     @Id @GeneratedValue @Column(name = "tag_id") var id: Long? = null,
     @Column(name = "tag_name") var name: String,
     @Column(name = "tag_color") var color: String,
-    @ManyToMany(mappedBy = "tags") var relatedIssues: MutableCollection<Issue>
+    @ManyToMany(mappedBy = "tags") var relatedIssues: MutableCollection<Issue> = mutableListOf()
 ) : Serializable

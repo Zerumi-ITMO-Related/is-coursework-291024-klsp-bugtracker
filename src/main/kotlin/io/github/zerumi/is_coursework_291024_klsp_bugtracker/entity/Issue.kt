@@ -44,8 +44,8 @@ class Issue(
         name = "CourseIssueTag",
         joinColumns = [JoinColumn(name = "issue_id")],
         inverseJoinColumns = [JoinColumn(name = "tag_id")],
-    ) var tags: MutableCollection<Tag>,
+    ) var tags: MutableCollection<Tag> = mutableListOf(),
 
-    @ManyToMany(mappedBy = "issues") var events: MutableCollection<Event>,
-    @OneToMany(mappedBy = "parentIssue") var subIssues: MutableCollection<Issue>,
+    @ManyToMany(mappedBy = "issues") var events: MutableCollection<Event> = mutableListOf(),
+    @OneToMany(mappedBy = "parentIssue") var subIssues: MutableCollection<Issue> = mutableListOf(),
 ) : Serializable
