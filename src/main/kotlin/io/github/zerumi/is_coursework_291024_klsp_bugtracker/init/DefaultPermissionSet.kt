@@ -13,7 +13,7 @@ class DefaultPermissionSet(
     companion object {
         private const val DEFAULT_PERMISSIONS_NAME = "default"
         private val DEFAULT_PERMISSIONS =
-            Permissions.PERMISSION_EDIT_PERMISSIONS or Permissions.PERMISSION_EDIT_PERMISSIONS
+            Permissions.EDIT_PERMISSIONS or Permissions.CREATE_ISSUE
 
         lateinit var DEFAULT_PERMISSION_SET: PermissionSet
             private set
@@ -24,6 +24,9 @@ class DefaultPermissionSet(
             name = DEFAULT_PERMISSIONS_NAME,
             permissions = DEFAULT_PERMISSIONS
         )
+
+        defaultPermissionSet.name = DEFAULT_PERMISSIONS_NAME
+        defaultPermissionSet.permissions = DEFAULT_PERMISSIONS
 
         DEFAULT_PERMISSION_SET = permissionSetRepository.save(defaultPermissionSet)
     }
