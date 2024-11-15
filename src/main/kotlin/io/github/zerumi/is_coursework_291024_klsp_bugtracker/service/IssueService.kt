@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 
 @Service
-class IssueService(val userService: UserService, val issueRepository: IssueRepository, val commentRepository: CommentRepository) {
-
+class IssueService(
+    val userService: UserService, val issueRepository: IssueRepository, val commentRepository: CommentRepository
+) {
     // todo sortProperty enum
     fun getIssues(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "comment.creationTime"): List<Issue> =
         issueRepository.findAll(PageRequest.of(pageNumber, issuesPerPage, Sort.by(sortProperty))).toList()
