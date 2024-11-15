@@ -26,12 +26,12 @@ class User(
     @Column(name = "login") var login: String,
     @Column(name = "password") var pass: String,
     @OneToOne @JoinColumn(name = "avatar_file_id") var avatar: File? = null,
-    @ManyToOne @JoinColumn(name = "permission_set_id") var permissions: PermissionSet,
+    @ManyToOne @JoinColumn(name = "permission_set_id") var permissionSet: PermissionSet,
 
     @OneToMany(mappedBy = "user") var comments: MutableCollection<Comment> = mutableListOf(),
     @OneToMany(mappedBy = "user") var ratings: MutableCollection<Rating> = mutableListOf(),
 ) : UserDetails, Serializable {
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf(permissions)
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf(permissionSet)
     override fun getPassword(): String = pass
     override fun getUsername(): String = login
 }

@@ -18,7 +18,7 @@ import kotlin.reflect.jvm.internal.impl.renderer.DescriptorRenderer.ValueParamet
 class PermissionSet(
     @Id @GeneratedValue @Column(name = "permission_set_id") var id: Long? = null,
     @Column(name = "permission_set_name", unique = true) var name: String,
-    @OneToMany(mappedBy = "permissions") var assignedUsers: MutableCollection<User> = mutableListOf(),
+    @OneToMany(mappedBy = "permissionSet") var assignedUsers: MutableCollection<User> = mutableListOf(),
     // permissions
     @Column(name = "permission_set") var permissions: ULong,
 ) : GrantedAuthority, Serializable {

@@ -23,7 +23,7 @@ class AuthService(
             displayName = request.displayName,
             login = request.username,
             pass = passwordEncoder.encode(request.password),
-            permissions = DefaultPermissionSet.DEFAULT_PERMISSION_SET,
+            permissionSet = DefaultPermissionSet.DEFAULT_PERMISSION_SET,
         )
 
         userService.create(user)

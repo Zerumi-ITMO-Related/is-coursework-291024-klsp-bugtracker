@@ -1,6 +1,7 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.interceptor
 
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.annotation.RequirePermission
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.checkPermission
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -18,7 +19,7 @@ class RequirePermissionInterceptor(val userService: UserService) : HandlerInterc
             if (method != null) {
                 val currentUser = userService.getCurrentUser()
 
-                if (method.permission and currentUser.permissions.permissions == 0.toULong()) {
+                if (!checkPermission(currentUser.permissionSet.permissions, method.permission)) {
                     response.status = HttpServletResponse.SC_FORBIDDEN
                     return false
                 }
