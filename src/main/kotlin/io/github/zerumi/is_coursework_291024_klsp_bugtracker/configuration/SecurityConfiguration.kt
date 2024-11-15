@@ -51,6 +51,7 @@ class SecurityConfiguration(
 
         http.authorizeHttpRequests { ar ->
             ar
+                .requestMatchers(mvc.pattern("/api/v1/issue/page/**")).permitAll()
                 .requestMatchers(mvc.pattern("/api/v1/auth/**")).permitAll()
                 .requestMatchers(mvc.pattern("/swagger-ui/**"), mvc.pattern("/swagger-resources/*"), mvc.pattern("/v3/api-docs/**")).permitAll()
                 .anyRequest().authenticated()
