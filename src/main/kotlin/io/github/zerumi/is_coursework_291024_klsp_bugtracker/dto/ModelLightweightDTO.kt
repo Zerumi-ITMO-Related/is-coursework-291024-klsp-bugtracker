@@ -3,6 +3,7 @@ package io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.context
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.security.OwnedObject
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.CommentService
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.IssueService
 import java.io.Serializable
 import java.time.ZonedDateTime
@@ -12,7 +13,9 @@ data class CommentInfo(
     val creationTime: ZonedDateTime,
     val lastModified: ZonedDateTime?,
     val content: String,
-) : Serializable
+) : Serializable, OwnedObject {
+    override fun ownership(): User = toObject(this).user
+}
 
 data class EpicInfo(
     val id: Long? = null,
@@ -40,7 +43,7 @@ data class IssueInfo(
     val id: Long? = null,
     val title: String,
 ) : Serializable, OwnedObject {
-    override fun getOwner(): User = toObject(this).comment.user
+    override fun ownership(): User = toObject(this).comment.user
 }
 
 data class PermissionSetInfo(
