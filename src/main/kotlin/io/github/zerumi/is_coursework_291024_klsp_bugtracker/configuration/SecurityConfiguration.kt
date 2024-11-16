@@ -57,6 +57,13 @@ class SecurityConfiguration(
         http.authorizeHttpRequests { ar ->
             ar
                 .requestMatchers(mvc.pattern("/api/v1/issue/page/**")).permitAll()
+                .requestMatchers(mvc.pattern("/api/v1/event/page/**")).permitAll()
+                .requestMatchers(mvc.pattern("/api/v1/epic/page/**")).permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/tag/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/sprint/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/issue/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/event/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/epic/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/comment/**").permitAll()
                 .requestMatchers(mvc.pattern("/api/v1/auth/**")).permitAll()
                 .requestMatchers(
