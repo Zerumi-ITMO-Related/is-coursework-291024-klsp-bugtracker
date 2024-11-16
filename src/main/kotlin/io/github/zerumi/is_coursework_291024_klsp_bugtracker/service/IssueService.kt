@@ -1,6 +1,6 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.service
 
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueDTO
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.CommentRepository
@@ -14,11 +14,13 @@ import java.time.ZonedDateTime
 class IssueService(
     val userService: UserService, val issueRepository: IssueRepository, val commentRepository: CommentRepository
 ) {
+    fun getById(id: Long?): Issue = issueRepository.getReferenceById(requireNotNull(id))
+
     // todo sortProperty enum
     fun getIssues(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "comment.creationTime"): List<Issue> =
         issueRepository.findAll(PageRequest.of(pageNumber, issuesPerPage, Sort.by(sortProperty))).toList()
 
-    fun openIssue(issueModelDTO: IssueRequestDTO) {
+    fun createIssue(issueModelDTO: IssueRequestDTO) {
         val comment = Comment(
             user = userService.getCurrentUser(),
             creationTime = ZonedDateTime.now(),
@@ -39,33 +41,11 @@ class IssueService(
         issueRepository.save(newIssue)
     }
 
-    fun updateIssue(issueDTO: IssueDTO) {
-        requireNotNull(issueDTO.id)
-
-        val currentUser = userService.getCurrentUser()
-        val issueToUpdate = issueRepository.getReferenceById(issueDTO.id)
-
-        requireOwnership(currentUser.id ?: -1, issueToUpdate.comment.user.id ?: -2) {
-            requirePermissions(
-                currentUser.permissionSet.permissions, Permissions.EDIT_ANY_ISSUE or Permissions.PRIVILEGED
-            )
-        }
-
-        issueToUpdate.title = issueDTO.title
-
+    fun updateIssue(issueInfo: IssueInfo) {
+        val issueToUpdate = issueRepository.getReferenceById(requireNotNull(issueInfo.id))
+        issueToUpdate.title = issueInfo.title
         issueRepository.save(issueToUpdate)
     }
 
-    fun deleteIssue(id: Long) {
-        val currentUser = userService.getCurrentUser()
-        val issueToUpdate = issueRepository.getReferenceById(id)
-
-        requireOwnership(currentUser.id ?: -1, issueToUpdate.comment.user.id ?: -2) {
-            requirePermissions(
-                currentUser.permissionSet.permissions, Permissions.EDIT_ANY_ISSUE or Permissions.PRIVILEGED
-            )
-        }
-
-        issueRepository.deleteById(id)
-    }
+    fun deleteIssue(issueInfo: IssueInfo) = issueRepository.deleteById(requireNotNull(issueInfo.id))
 }
