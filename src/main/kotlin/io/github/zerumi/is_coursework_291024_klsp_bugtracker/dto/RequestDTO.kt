@@ -1,5 +1,6 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto
 
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.RatingValue
 import java.io.Serializable
 
 data class AuthRequestDTO(val login: String, val password: String) : Serializable
@@ -15,3 +16,8 @@ data class CommentRequestDTO(
     val content: String,
     val attachedFilesIds: List<Long>,
 ) : Serializable
+
+data class RatingRequestDTO(
+    val commentId: Long,
+    val rating: RatingValue
+)
