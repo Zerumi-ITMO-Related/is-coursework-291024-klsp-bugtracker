@@ -15,7 +15,7 @@ class EventService(val eventRepository: EventRepository) {
     fun getEvents(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "name"): List<Event> =
         eventRepository.findAll(PageRequest.of(pageNumber, issuesPerPage, Sort.by(sortProperty))).toList()
 
-    fun createEvent(eventRequestDTO: EventRequestDTO) {
+    fun createEvent(eventRequestDTO: EventRequestDTO): Event {
         val event = Event(
             name = eventRequestDTO.name,
             description = eventRequestDTO.description,
@@ -23,10 +23,10 @@ class EventService(val eventRepository: EventRepository) {
             eventReview = null,
         )
 
-        eventRepository.save(event)
+        return eventRepository.save(event)
     }
 
-    fun updateEvent(eventInfo: EventInfo) {
+    fun updateEvent(eventInfo: EventInfo): Event {
         val eventToUpdate = eventRepository.getReferenceById(requireNotNull(eventInfo.id))
 
         eventToUpdate.name = eventInfo.name
@@ -34,10 +34,8 @@ class EventService(val eventRepository: EventRepository) {
         eventToUpdate.date = eventInfo.date
         eventToUpdate.eventReview = eventInfo.eventReview
 
-        eventRepository.save(eventToUpdate)
+        return eventRepository.save(eventToUpdate)
     }
 
-    fun deleteEvent(eventInfo: EventInfo) {
-        eventRepository.deleteById(requireNotNull(eventInfo.id))
-    }
+    fun deleteEvent(eventInfo: EventInfo) = eventRepository.deleteById(requireNotNull(eventInfo.id))
 }

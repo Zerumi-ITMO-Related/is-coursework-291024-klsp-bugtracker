@@ -23,28 +23,24 @@ class TagController(
     val tagService: TagService
 ) {
     @GetMapping("/{id}")
-    fun getTag(@PathVariable id: Long) : TagDTO {
-        return toDTO(tagService.getById(id))
-    }
+    fun getTag(@PathVariable id: Long): TagDTO =
+        toDTO(tagService.getById(id))
 
     @PostMapping
     @RequirePermission(Permissions.MANAGE_TAGS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun createTag(@RequestBody tagRequestDTO: TagRequestDTO) {
-        return tagService.createTag(tagRequestDTO)
-    }
+    fun createTag(@RequestBody tagRequestDTO: TagRequestDTO): TagDTO =
+        toDTO(tagService.createTag(tagRequestDTO))
 
     @PutMapping
     @RequirePermission(Permissions.MANAGE_TAGS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun updateTag(@RequestBody tagInfo: TagInfo) {
-        return tagService.updateTag(tagInfo)
-    }
+    fun updateTag(@RequestBody tagInfo: TagInfo): TagDTO =
+        toDTO(tagService.updateTag(tagInfo))
 
     @DeleteMapping
     @RequirePermission(Permissions.MANAGE_TAGS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteTag(@RequestBody tagInfo: TagInfo) {
-        return tagService.deleteTag(tagInfo)
-    }
+    fun deleteTag(@RequestBody tagInfo: TagInfo): Unit =
+        tagService.deleteTag(tagInfo)
 }

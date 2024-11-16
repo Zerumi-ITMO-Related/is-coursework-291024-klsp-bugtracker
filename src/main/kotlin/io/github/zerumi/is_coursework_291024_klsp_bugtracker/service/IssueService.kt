@@ -20,7 +20,7 @@ class IssueService(
     fun getIssues(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "comment.creationTime"): List<Issue> =
         issueRepository.findAll(PageRequest.of(pageNumber, issuesPerPage, Sort.by(sortProperty))).toList()
 
-    fun createIssue(issueModelDTO: IssueRequestDTO) {
+    fun createIssue(issueModelDTO: IssueRequestDTO): Issue {
         val comment = Comment(
             user = userService.getCurrentUser(),
             creationTime = ZonedDateTime.now(),
@@ -38,13 +38,15 @@ class IssueService(
         )
 
         commentRepository.save(comment)
-        issueRepository.save(newIssue)
+        return issueRepository.save(newIssue)
     }
 
-    fun updateIssue(issueInfo: IssueInfo) {
+    fun updateIssue(issueInfo: IssueInfo): Issue {
         val issueToUpdate = issueRepository.getReferenceById(requireNotNull(issueInfo.id))
+
         issueToUpdate.title = issueInfo.title
-        issueRepository.save(issueToUpdate)
+
+        return issueRepository.save(issueToUpdate)
     }
 
     fun deleteIssue(issueInfo: IssueInfo) = issueRepository.deleteById(requireNotNull(issueInfo.id))

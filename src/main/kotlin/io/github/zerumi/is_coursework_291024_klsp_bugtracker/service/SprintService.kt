@@ -9,12 +9,11 @@ import java.time.ZonedDateTime
 
 @Service
 class SprintService(
-    val epicService: EpicService,
-    val sprintRepository: SprintRepository
+    val epicService: EpicService, val sprintRepository: SprintRepository
 ) {
     fun getById(id: Long?) = sprintRepository.getReferenceById(requireNotNull(id))
 
-    fun createSprint(sprintRequestDTO: SprintRequestDTO) {
+    fun createSprint(sprintRequestDTO: SprintRequestDTO): Sprint {
         val sprint = Sprint(
             name = sprintRequestDTO.name,
             description = sprintRequestDTO.description,
@@ -23,20 +22,18 @@ class SprintService(
             relatedEpic = epicService.getById(sprintRequestDTO.relatedEpicId),
         )
 
-        sprintRepository.save(sprint)
+        return sprintRepository.save(sprint)
     }
 
-    fun updateSprint(sprintInfo: SprintInfo) {
+    fun updateSprint(sprintInfo: SprintInfo): Sprint {
         val sprintToUpdate = sprintRepository.getReferenceById(requireNotNull(sprintInfo.id))
 
         sprintToUpdate.name = sprintInfo.name
         sprintToUpdate.description = sprintInfo.description
         sprintToUpdate.deadline = sprintInfo.deadline
 
-        sprintRepository.save(sprintToUpdate)
+        return sprintRepository.save(sprintToUpdate)
     }
 
-    fun deleteSprint(sprintInfo: SprintInfo) {
-        sprintRepository.deleteById(requireNotNull(sprintInfo.id))
-    }
+    fun deleteSprint(sprintInfo: SprintInfo) = sprintRepository.deleteById(requireNotNull(sprintInfo.id))
 }

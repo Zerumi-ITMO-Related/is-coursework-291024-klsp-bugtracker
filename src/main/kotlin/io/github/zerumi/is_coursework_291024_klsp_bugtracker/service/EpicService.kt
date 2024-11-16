@@ -17,27 +17,25 @@ class EpicService(
     fun getEpics(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "name"): List<Epic> =
         epicRepository.findAll(PageRequest.of(pageNumber, issuesPerPage, Sort.by(sortProperty))).toList()
 
-    fun createEpic(epicRequestDTO: EpicRequestDTO) {
+    fun createEpic(epicRequestDTO: EpicRequestDTO): Epic {
         val epic = Epic(
             name = epicRequestDTO.name,
             description = epicRequestDTO.description,
             deadline = epicRequestDTO.deadline,
         )
 
-        epicRepository.save(epic)
+        return epicRepository.save(epic)
     }
 
-    fun updateEpic(epicInfo: EpicInfo) {
+    fun updateEpic(epicInfo: EpicInfo): Epic {
         val epicToUpdate = epicRepository.getReferenceById(requireNotNull(epicInfo.id))
 
         epicToUpdate.name = epicInfo.name
         epicToUpdate.description = epicInfo.description
         epicToUpdate.deadline = epicInfo.deadline
 
-        epicRepository.save(epicToUpdate)
+        return epicRepository.save(epicToUpdate)
     }
 
-    fun deleteEpic(epicInfo: EpicInfo) {
-        epicRepository.deleteById(requireNotNull(epicInfo.id))
-    }
+    fun deleteEpic(epicInfo: EpicInfo) = epicRepository.deleteById(requireNotNull(epicInfo.id))
 }

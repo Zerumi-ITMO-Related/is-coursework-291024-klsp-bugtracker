@@ -9,17 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-
 @RestController
 @RequestMapping("/api/v1/auth")
 class AuthController(val authenticationService: AuthService) {
     @PostMapping("/register")
-    fun register(@RequestBody request: RegisterRequestDTO): JWTTokenResponseDTO {
-        return authenticationService.register(request)
-    }
+    fun register(@RequestBody request: RegisterRequestDTO): JWTTokenResponseDTO =
+        authenticationService.register(request)
 
     @PostMapping("/login")
-    fun login(@RequestBody request: AuthRequestDTO): JWTTokenResponseDTO {
-        return authenticationService.login(request)
-    }
+    fun login(@RequestBody request: AuthRequestDTO): JWTTokenResponseDTO =
+        authenticationService.login(request)
 }

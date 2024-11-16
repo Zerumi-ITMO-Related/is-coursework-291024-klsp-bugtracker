@@ -1,6 +1,8 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.controller
 
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.RatingDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.RatingRequestDTO
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.toDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.RatingService
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -16,13 +18,11 @@ class RatingController(
 ) {
     @PostMapping
     @SecurityRequirement(name = "Bearer Authentication")
-    fun createRating(@RequestBody ratingRequest: RatingRequestDTO) {
-        ratingService.createRating(ratingRequest)
-    }
+    fun createRating(@RequestBody ratingRequest: RatingRequestDTO): RatingDTO =
+        toDTO(ratingService.createRating(ratingRequest))
 
     @DeleteMapping
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteRating(@RequestBody ratingRequest: RatingRequestDTO) {
+    fun deleteRating(@RequestBody ratingRequest: RatingRequestDTO): Unit =
         ratingService.removeRating(ratingRequest)
-    }
 }

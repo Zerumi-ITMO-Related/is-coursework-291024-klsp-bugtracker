@@ -14,11 +14,9 @@ class CommentService(
     val commentRepository: CommentRepository,
     val userService: UserService,
 ) {
-    fun getById(id: Long?): Comment {
-        return commentRepository.getReferenceById(requireNotNull(id))
-    }
+    fun getById(id: Long?): Comment = commentRepository.getReferenceById(requireNotNull(id))
 
-    fun createComment(commentRequestDTO: CommentRequestDTO) {
+    fun createComment(commentRequestDTO: CommentRequestDTO): Comment {
         val comment = Comment(
             user = userService.getCurrentUser(),
             creationTime = ZonedDateTime.now(),
@@ -27,18 +25,16 @@ class CommentService(
             content = commentRequestDTO.content,
         )
 
-        commentRepository.save(comment)
+        return commentRepository.save(comment)
     }
 
-    fun updateComment(commentInfo: CommentInfo) {
+    fun updateComment(commentInfo: CommentInfo): Comment {
         val commentToUpdate = commentRepository.getReferenceById(requireNotNull(commentInfo.id))
 
         commentToUpdate.content = commentInfo.content
 
-        commentRepository.save(commentToUpdate)
+        return commentRepository.save(commentToUpdate)
     }
 
-    fun deleteComment(commentInfo: CommentInfo) {
-        commentRepository.deleteById(requireNotNull(commentInfo.id))
-    }
+    fun deleteComment(commentInfo: CommentInfo) = commentRepository.deleteById(requireNotNull(commentInfo.id))
 }

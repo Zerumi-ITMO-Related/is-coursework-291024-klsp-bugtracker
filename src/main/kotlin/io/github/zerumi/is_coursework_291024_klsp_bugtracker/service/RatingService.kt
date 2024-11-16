@@ -12,14 +12,14 @@ class RatingService(
     val ratingRepository: RatingRepository,
     val userService: UserService,
 ) {
-    fun createRating(ratingRequestDTO: RatingRequestDTO) {
+    fun createRating(ratingRequestDTO: RatingRequestDTO): Rating {
         val rating = Rating(
             comment = commentRepository.getReferenceById(ratingRequestDTO.commentId),
             user = userService.getCurrentUser(),
             rating = ratingRequestDTO.rating
         )
 
-        ratingRepository.save(rating)
+        return ratingRepository.save(rating)
     }
 
     fun removeRating(ratingRequestDTO: RatingRequestDTO) {
@@ -29,8 +29,6 @@ class RatingService(
             user = userService.getCurrentUser()
         )
 
-        if (rating != null) {
-            ratingRepository.delete(rating)
-        }
+        return ratingRepository.delete(requireNotNull(rating))
     }
 }

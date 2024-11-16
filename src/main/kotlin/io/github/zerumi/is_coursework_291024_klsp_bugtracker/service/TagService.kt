@@ -12,25 +12,23 @@ class TagService(
 ) {
     fun getById(id: Long?) = tagRepository.getReferenceById(requireNotNull(id))
 
-    fun createTag(tagRequestDTO: TagRequestDTO) {
+    fun createTag(tagRequestDTO: TagRequestDTO): Tag {
         val tag = Tag(
             name = tagRequestDTO.name,
             color = tagRequestDTO.color,
         )
 
-        tagRepository.save(tag)
+        return tagRepository.save(tag)
     }
 
-    fun updateTag(tagInfo: TagInfo) {
+    fun updateTag(tagInfo: TagInfo): Tag {
         val tagToUpdate = tagRepository.getReferenceById(requireNotNull(tagInfo.id))
 
         tagToUpdate.name = tagInfo.name
         tagToUpdate.color = tagInfo.color
 
-        tagRepository.save(tagToUpdate)
+        return tagRepository.save(tagToUpdate)
     }
 
-    fun deleteTag(tagInfo: TagInfo) {
-        tagRepository.deleteById(requireNotNull(tagInfo.id))
-    }
+    fun deleteTag(tagInfo: TagInfo) = tagRepository.deleteById(requireNotNull(tagInfo.id))
 }
