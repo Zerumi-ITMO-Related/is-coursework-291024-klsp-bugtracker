@@ -29,6 +29,6 @@ class PermissionEvaluatorImpl : PermissionEvaluator {
         val permissions = principal.permissionSet.permissions
         val requiredPermission = Permissions.valueOf(permission)
 
-        return checkPermission(permissions, requiredPermission)
+        return checkPermission(permissions, requiredPermission) || checkPermission(permissions, Permissions.PRIVILEGED)
     }
 }
