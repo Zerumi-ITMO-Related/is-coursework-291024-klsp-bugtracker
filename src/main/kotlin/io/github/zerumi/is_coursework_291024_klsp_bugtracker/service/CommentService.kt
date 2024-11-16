@@ -1,9 +1,7 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.service
 
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.CommentDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.CommentInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.CommentRequestDTO
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.toDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Comment
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.CommentRepository
 import org.springframework.stereotype.Service

@@ -1,4 +1,4 @@
-package io.github.zerumi.is_coursework_291024_klsp_bugtracker.service;
+package io.github.zerumi.is_coursework_291024_klsp_bugtracker.service
 
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.RatingRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Rating

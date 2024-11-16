@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(val userRepository: UserRepository): UserDetailsService {
     fun getCurrentUser(): User {
-        val login = SecurityContextHolder.getContext().authentication.name;
-        return getByLogin(login);
+        val login = SecurityContextHolder.getContext().authentication.name
+        return getByLogin(login)
     }
 
     fun getByLogin(login: String): User {
