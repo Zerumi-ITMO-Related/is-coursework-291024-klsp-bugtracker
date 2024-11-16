@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/issue")
 class IssueController(val issueService: IssueService) {
+    @GetMapping("/{id}")
+    fun getIssue(@PathVariable id: Long): IssueDTO {
+        return toDTO(issueService.getById(id))
+    }
+
     @GetMapping("/page/{pageNo}/{issuesPerPage}")
     fun getIssues(@PathVariable pageNo: Int, @PathVariable issuesPerPage: Int): List<IssueDTO> {
         val issues = issueService.getIssues(pageNo, issuesPerPage)
