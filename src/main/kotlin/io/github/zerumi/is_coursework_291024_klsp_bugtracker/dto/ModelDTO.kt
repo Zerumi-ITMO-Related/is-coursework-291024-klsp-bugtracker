@@ -127,3 +127,34 @@ fun toDTO(file: File) = FileDTO(
 fun toDTO(rating: Rating) = RatingDTO(
     id = rating.id, user = toInfo(rating.user), rating = rating.rating, comment = toInfo(rating.comment)
 )
+
+fun toDTO(epic: Epic) = EpicDTO(id = epic.id,
+    name = epic.name,
+    description = epic.description,
+    deadline = epic.deadline,
+    sprints = epic.sprints.map { toInfo(it) })
+
+fun toDTO(sprint: Sprint) = SprintDTO(id = sprint.id,
+    name = sprint.name,
+    description = sprint.description,
+    createdAt = sprint.createdAt,
+    deadline = sprint.deadline,
+    relatedEpic = toInfo(sprint.relatedEpic),
+    issues = sprint.issues.map { toInfo(it) })
+
+fun toDTO(event: Event) = EventDTO(id = event.id,
+    name = event.name,
+    description = event.description,
+    date = event.date,
+    eventReview = event.eventReview,
+    issues = event.issues.map { toInfo(it) })
+
+fun toDTO(tag: Tag) =
+    TagDTO(id = tag.id, name = tag.name, color = tag.color, relatedIssues = tag.relatedIssues.map { toInfo(it) })
+
+fun toDTO(permissionSet: PermissionSet) = PermissionSetDTO(
+    id = permissionSet.id,
+    name = permissionSet.name,
+    assignedUsers = permissionSet.assignedUsers.map { toInfo(it) },
+    permissions = permissionSet.permissions
+)
