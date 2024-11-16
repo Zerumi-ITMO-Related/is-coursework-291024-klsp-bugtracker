@@ -40,14 +40,14 @@ class SprintController(
     @PutMapping
     @RequirePermission(Permissions.MANAGE_SPRINT)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun updateSprint(@RequestBody @P("sprint") sprintInfo: SprintInfo) {
+    fun updateSprint(@RequestBody sprintInfo: SprintInfo) {
         return sprintService.updateSprint(sprintInfo)
     }
 
     @DeleteMapping
     @RequirePermission(Permissions.MANAGE_SPRINT)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteSprint(@RequestBody @P("sprint") sprintInfo: SprintInfo) {
+    fun deleteSprint(@RequestBody sprintInfo: SprintInfo) {
         return sprintService.deleteSprint(sprintInfo)
     }
 }

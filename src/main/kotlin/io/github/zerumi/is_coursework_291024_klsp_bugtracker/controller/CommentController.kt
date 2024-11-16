@@ -46,7 +46,7 @@ class CommentController(
     @DeleteMapping
     @PreAuthorize("hasPermission(#comment, 'CommentInfo', 'UPDATE_ANY_COMMENT')")
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteComment(@RequestBody commentInfo: CommentInfo) {
+    fun deleteComment(@RequestBody @P("comment") commentInfo: CommentInfo) {
         return commentService.deleteComment(commentInfo)
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -29,21 +30,21 @@ class TagController(
     @PostMapping
     @RequirePermission(Permissions.MANAGE_TAGS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun createTag(tagRequestDTO: TagRequestDTO) {
+    fun createTag(@RequestBody tagRequestDTO: TagRequestDTO) {
         return tagService.createTag(tagRequestDTO)
     }
 
     @PutMapping
     @RequirePermission(Permissions.MANAGE_TAGS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun updateTag(tagInfo: TagInfo) {
+    fun updateTag(@RequestBody tagInfo: TagInfo) {
         return tagService.updateTag(tagInfo)
     }
 
     @DeleteMapping
     @RequirePermission(Permissions.MANAGE_TAGS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteTag(tagInfo: TagInfo) {
+    fun deleteTag(@RequestBody tagInfo: TagInfo) {
         return tagService.deleteTag(tagInfo)
     }
 }

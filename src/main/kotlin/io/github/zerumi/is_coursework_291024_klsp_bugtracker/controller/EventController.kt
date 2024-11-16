@@ -28,21 +28,21 @@ class EventController(
     @PostMapping
     @RequirePermission(Permissions.MANAGE_EVENTS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun createEvent(eventRequestDTO: EventRequestDTO) {
+    fun createEvent(@RequestBody eventRequestDTO: EventRequestDTO) {
         return eventService.createEvent(eventRequestDTO)
     }
 
     @PutMapping
     @RequirePermission(Permissions.MANAGE_EVENTS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun updateEvent(eventInfo: EventInfo) {
+    fun updateEvent(@RequestBody eventInfo: EventInfo) {
         return eventService.updateEvent(eventInfo)
     }
 
     @DeleteMapping
     @RequirePermission(Permissions.MANAGE_EVENTS)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteEvent(@RequestBody @P("event") eventInfo: EventInfo) {
+    fun deleteEvent(@RequestBody eventInfo: EventInfo) {
         return eventService.deleteEvent(eventInfo)
     }
 }

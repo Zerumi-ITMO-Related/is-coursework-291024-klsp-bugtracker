@@ -35,14 +35,14 @@ class EpicController(
     @PutMapping
     @RequirePermission(Permissions.MANAGE_EPIC)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun updateEpic(@RequestBody @P("epic") epicInfo: EpicInfo) {
+    fun updateEpic(@RequestBody epicInfo: EpicInfo) {
         epicService.updateEpic(epicInfo)
     }
 
     @DeleteMapping
     @RequirePermission(Permissions.MANAGE_EPIC)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteEpic(@RequestBody @P("epic") epicInfo: EpicInfo) {
+    fun deleteEpic(@RequestBody epicInfo: EpicInfo) {
         epicService.deleteEpic(epicInfo)
     }
 }
