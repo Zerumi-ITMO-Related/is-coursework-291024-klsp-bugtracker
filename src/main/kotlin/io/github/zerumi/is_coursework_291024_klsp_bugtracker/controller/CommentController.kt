@@ -25,11 +25,12 @@ class CommentController(
     val commentService: CommentService
 ) {
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): CommentDTO {
+    fun getComment(@PathVariable id: Long): CommentDTO {
         return toDTO(commentService.getById(id))
     }
 
     @PostMapping
+    @RequirePermission(Permissions.CREATE_COMMENT)
     @SecurityRequirement(name = "Bearer Authentication")
     fun createReply(@RequestBody commentRequestDTO: CommentRequestDTO) {
         return commentService.createComment(commentRequestDTO)
