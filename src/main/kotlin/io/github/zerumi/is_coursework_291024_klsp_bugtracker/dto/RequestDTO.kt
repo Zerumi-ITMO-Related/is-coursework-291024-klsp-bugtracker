@@ -7,3 +7,9 @@ data class AuthRequestDTO(val login: String, val password: String) : Serializabl
 data class IssueRequestDTO(
     val title: String, val content: String, val attachedFilesIds: List<Long>
 ) : Serializable
+
+data class CommentRequestDTO(
+    val parentCommentId: Long,
+    val content: String,
+    val attachedFilesIds: List<Long>,
+) : Serializable

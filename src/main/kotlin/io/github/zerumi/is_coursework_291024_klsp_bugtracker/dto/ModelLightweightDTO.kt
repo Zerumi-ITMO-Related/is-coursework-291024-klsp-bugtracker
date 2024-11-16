@@ -141,3 +141,5 @@ fun toInfo(user: User): UserInfo = UserInfo(
 )
 
 fun toObject(issueInfo: IssueInfo) = context.getBean(IssueService::class.java).getById(issueInfo.id)
+
+fun toObject(commentInfo: CommentInfo) = context.getBean(CommentService::class.java).getById(commentInfo.id)
