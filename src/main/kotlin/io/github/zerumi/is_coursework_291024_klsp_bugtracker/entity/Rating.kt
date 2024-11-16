@@ -15,7 +15,9 @@ import java.io.Serializable
  */
 
 @Entity
-@Table(name = "CourseRating", schema = "s367837")
+@Table(name = "CourseRating", schema = "s367837", uniqueConstraints = [
+    UniqueConstraint(columnNames = ["comment_id", "user_id"])
+])
 class Rating(
     @Id @GeneratedValue @Column(name = "rating_id") var id: Long? = null,
     @ManyToOne @JoinColumn(name = "comment_id") var comment: Comment,
