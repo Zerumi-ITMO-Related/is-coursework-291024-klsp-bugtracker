@@ -5,6 +5,8 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.*
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Permissions
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.IssueService
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.parameters.P
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -19,19 +21,23 @@ class IssueController(val issueService: IssueService) {
     @PostMapping
     @RequirePermission(Permissions.CREATE_ISSUE)
     @SecurityRequirement(name = "Bearer Authentication")
-    fun submitIssue(@RequestBody issueModelDTO: IssueRequestDTO) {
-        return issueService.openIssue(issueModelDTO)
+    fun createIssue(@RequestBody issueModelDTO: IssueRequestDTO) {
+        return issueService.createIssue(issueModelDTO)
     }
 
     @PutMapping
+    @PreAuthorize("hasPermission(#issue, 'IssueInfo', 'UPDATE_ANY_ISSUE')")
     @SecurityRequirement(name = "Bearer Authentication")
-    fun updateIssue(@RequestBody issueDTO: IssueDTO) {
-        return issueService.updateIssue(issueDTO)
+    fun updateIssue(@RequestBody @P("issue") issueInfo: IssueInfo) {
+        return issueService.updateIssue(issueInfo)
     }
 
-    @DeleteMapping("/{id}")
+    // todo delete by id with autocomplete issue info & preauthorize
+
+    @DeleteMapping
+    @PreAuthorize("hasPermission(#issue, 'IssueInfo', 'UPDATE_ANY_ISSUE')")
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteIssueById(id: Long) {
-        return issueService.deleteIssue(id)
+    fun deleteIssue(@RequestBody @P("issue") issueInfo: IssueInfo) {
+        return issueService.deleteIssue(issueInfo)
     }
 }

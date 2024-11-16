@@ -1,6 +1,9 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto
 
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.context
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.security.OwnedObject
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.IssueService
 import java.io.Serializable
 import java.time.ZonedDateTime
 
@@ -36,7 +39,9 @@ data class FileInfo(
 data class IssueInfo(
     val id: Long? = null,
     val title: String,
-) : Serializable
+) : Serializable, OwnedObject {
+    override fun getOwner(): User = toObject(this).comment.user
+}
 
 data class PermissionSetInfo(
     val id: Long? = null,
@@ -68,21 +73,21 @@ data class UserInfo(
     val displayName: String,
 ) : Serializable
 
-fun toInfo(comment: Comment) : CommentInfo = CommentInfo(
+fun toInfo(comment: Comment): CommentInfo = CommentInfo(
     id = comment.id,
     creationTime = comment.creationTime,
     lastModified = comment.lastModified,
     content = comment.content,
 )
 
-fun toInfo(epic: Epic) : EpicInfo = EpicInfo(
+fun toInfo(epic: Epic): EpicInfo = EpicInfo(
     id = epic.id,
     name = epic.name,
     description = epic.description,
     deadline = epic.deadline,
 )
 
-fun toInfo(event: Event) : EventInfo = EventInfo(
+fun toInfo(event: Event): EventInfo = EventInfo(
     id = event.id,
     name = event.name,
     description = event.description,
@@ -90,30 +95,30 @@ fun toInfo(event: Event) : EventInfo = EventInfo(
     eventReview = event.eventReview,
 )
 
-fun toInfo(file: File) : FileInfo = FileInfo(
+fun toInfo(file: File): FileInfo = FileInfo(
     id = file.id,
     filepath = file.filepath,
     mimeType = file.mimeType,
     uploadTime = file.uploadTime,
 )
 
-fun toInfo(issue: Issue) : IssueInfo = IssueInfo(
+fun toInfo(issue: Issue): IssueInfo = IssueInfo(
     id = issue.id,
     title = issue.title,
 )
 
-fun toInfo(permissionSet: PermissionSet) : PermissionSetInfo = PermissionSetInfo(
+fun toInfo(permissionSet: PermissionSet): PermissionSetInfo = PermissionSetInfo(
     id = permissionSet.id,
     name = permissionSet.name,
     permissions = permissionSet.permissions,
 )
 
-fun toInfo(rating: Rating) : RatingInfo = RatingInfo(
+fun toInfo(rating: Rating): RatingInfo = RatingInfo(
     id = rating.id,
     rating = rating.rating,
 )
 
-fun toInfo(sprint: Sprint) : SprintInfo = SprintInfo(
+fun toInfo(sprint: Sprint): SprintInfo = SprintInfo(
     id = sprint.id,
     name = sprint.name,
     description = sprint.description,
@@ -121,13 +126,15 @@ fun toInfo(sprint: Sprint) : SprintInfo = SprintInfo(
     deadline = sprint.deadline,
 )
 
-fun toInfo(tag: Tag) : TagInfo = TagInfo(
+fun toInfo(tag: Tag): TagInfo = TagInfo(
     id = tag.id,
     name = tag.name,
     color = tag.color,
 )
 
-fun toInfo(user: User) : UserInfo = UserInfo(
+fun toInfo(user: User): UserInfo = UserInfo(
     id = user.id,
     displayName = user.displayName,
 )
+
+fun toObject(issueInfo: IssueInfo) = context.getBean(IssueService::class.java).getById(issueInfo.id)

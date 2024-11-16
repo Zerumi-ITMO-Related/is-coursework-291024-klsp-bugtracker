@@ -1,9 +1,12 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.configuration
 
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.filter.JWTFilter
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.security.PermissionEvaluatorImpl
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -23,11 +26,12 @@ import org.springframework.web.filter.CorsFilter
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 class SecurityConfiguration(
     val jwtFilter: JWTFilter,
     val userService: UserService,
     val mvc: MvcRequestMatcher.Builder,
+    val permissionEvaluatorImpl: PermissionEvaluatorImpl
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -50,11 +54,10 @@ class SecurityConfiguration(
         val corsFilter = CorsFilter(source)
 
         http.authorizeHttpRequests { ar ->
-            ar
-                .requestMatchers(mvc.pattern("/api/v1/issue/page/**")).permitAll()
-                .requestMatchers(mvc.pattern("/api/v1/auth/**")).permitAll()
-                .requestMatchers(mvc.pattern("/swagger-ui/**"), mvc.pattern("/swagger-resources/*"), mvc.pattern("/v3/api-docs/**")).permitAll()
-                .anyRequest().authenticated()
+            ar.requestMatchers(mvc.pattern("/api/v1/issue/page/**")).permitAll()
+                .requestMatchers(mvc.pattern("/api/v1/auth/**")).permitAll().requestMatchers(
+                    mvc.pattern("/swagger-ui/**"), mvc.pattern("/swagger-resources/*"), mvc.pattern("/v3/api-docs/**")
+                ).permitAll().anyRequest().authenticated()
         }.httpBasic(Customizer.withDefaults())
 
         http.authenticationProvider(authenticationProvider())
@@ -76,4 +79,11 @@ class SecurityConfiguration(
 
     @Bean
     fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager = config.authenticationManager
+
+    @Bean
+    fun createExpressionHandler(): MethodSecurityExpressionHandler {
+        val expressionHandler = DefaultMethodSecurityExpressionHandler()
+        expressionHandler.setPermissionEvaluator(permissionEvaluatorImpl)
+        return expressionHandler
+    }
 }

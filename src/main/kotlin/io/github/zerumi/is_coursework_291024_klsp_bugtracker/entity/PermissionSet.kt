@@ -41,7 +41,7 @@ fun requirePermissions(permissions: ULong, testPermissions: ULong) =
     if (testPermissions and permissions == 0.toULong()) throw AccessDeniedException("Permission denied") else Unit
 
 enum class Permissions {
-    PRIVILEGED, CREATE_ISSUE, EDIT_ANY_ISSUE,
+    PRIVILEGED, CREATE_ISSUE, UPDATE_ANY_ISSUE,
     // continue permission set
     ;
 
