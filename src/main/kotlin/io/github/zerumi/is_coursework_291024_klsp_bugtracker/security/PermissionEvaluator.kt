@@ -23,7 +23,7 @@ class PermissionEvaluatorImpl : PermissionEvaluator {
 
         val principal = authentication.principal as User
 
-        val owner = targetId.getOwner()
+        val owner = targetId.ownership()
         if (owner.id == principal.id) return true
 
         val permissions = principal.permissionSet.permissions
