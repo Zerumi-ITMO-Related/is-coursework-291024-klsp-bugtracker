@@ -37,6 +37,7 @@ import java.io.Serializable
 class Issue(
     @Id @GeneratedValue @Column(name = "issue_id") var id: Long? = null,
     @Column(name = "issue_title") var title: String,
+    @Column(name = "issue_ratio") var ratio: Double,
     @OneToOne @JoinColumn(name = "first_comment_id") var comment: Comment,
     @ManyToOne @JoinColumn(name = "related_sprint_id", nullable = true) var relatedSprint: Sprint?,
     @ManyToOne @JoinColumn(name = "parent_issue_id", nullable = true) var parentIssue: Issue?,

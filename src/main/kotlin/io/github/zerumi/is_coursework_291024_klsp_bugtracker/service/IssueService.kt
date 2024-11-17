@@ -6,6 +6,7 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.*
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 
@@ -20,9 +21,8 @@ class IssueService(
 ) {
     fun getById(id: Long?): Issue = issueRepository.getReferenceById(requireNotNull(id))
 
-    // todo sortProperty enum
-    fun getIssues(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "comment.creationTime"): List<Issue> =
-        issueRepository.findAll(PageRequest.of(pageNumber, issuesPerPage, Sort.by(sortProperty))).toList()
+    fun getIssues(pageNumber: Int, issuesPerPage: Int): List<Issue> =
+        issueRepository.findByParentIssueIsNull(PageRequest.of(pageNumber, issuesPerPage, Sort.by("ratio").descending()))
 
     fun createIssue(issueModelDTO: IssueRequestDTO): Issue {
         val comment = Comment(
@@ -31,11 +31,12 @@ class IssueService(
             lastModified = null,
             parentComment = null,
             content = issueModelDTO.content,
-            attachedFiles = mutableListOf(), // todo filesystem
+            attachedFiles = mutableListOf(),
         )
 
         val newIssue = Issue(
             title = issueModelDTO.title,
+            ratio = userService.getCurrentUser().ratio,
             comment = comment,
             relatedSprint = null,
             parentIssue = null,
@@ -135,5 +136,28 @@ class IssueService(
         eventToRemoveIssue.issues.remove(issueToRemoveEvent)
 
         return issueRepository.save(issueToRemoveEvent)
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    fun decreaseRatioEveryDay() {
+        val issues = issueRepository.findAll()
+        for (issue in issues) {
+            issue.ratio = (issue.ratio + INCREASE_PER_DAY).coerceAtLeast(0.0)
+        }
+        issueRepository.saveAll(issues)
+    }
+
+    fun increaseRatio(issueId: Long, ratio: Double) {
+        val issue = issueRepository.getReferenceById(issueId)
+        issue.ratio += ratio
+        issueRepository.save(issue)
+    }
+
+    companion object {
+        const val INCREASE_PER_DAY = -5.0
+        const val INCREASE_PER_LIKE = 5.0
+        const val INCREASE_PER_DISLIKE = -3.0
+        const val INCREASE_PER_COMMENT = 3.0
+
     }
 }

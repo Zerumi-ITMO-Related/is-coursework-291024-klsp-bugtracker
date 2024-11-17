@@ -11,17 +11,26 @@ import java.time.ZonedDateTime
 class CommentService(
     val commentRepository: CommentRepository,
     val userService: UserService,
+    val issueService: IssueService,
 ) {
     fun getById(id: Long?): Comment = commentRepository.getReferenceById(requireNotNull(id))
 
     fun createComment(commentRequestDTO: CommentRequestDTO): Comment {
+        val parentComment = commentRepository.getReferenceById(commentRequestDTO.parentCommentId)
+
         val comment = Comment(
             user = userService.getCurrentUser(),
             creationTime = ZonedDateTime.now(),
             lastModified = null,
-            parentComment = commentRepository.getReferenceById(commentRequestDTO.parentCommentId),
+            parentComment = parentComment,
             content = commentRequestDTO.content,
         )
+
+        if (parentComment.parentComment == null)
+            issueService.increaseRatio(
+                requireNotNull(issueService.issueRepository.findByComment(parentComment).id),
+                IssueService.INCREASE_PER_COMMENT
+            )
 
         return commentRepository.save(comment)
     }
