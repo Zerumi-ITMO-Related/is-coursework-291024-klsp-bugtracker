@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @OpenAPIDefinition(
     info = Info(
-        title = "Katana API",
+        title = "Katána API",
     ),
 )
 @SecurityScheme(
