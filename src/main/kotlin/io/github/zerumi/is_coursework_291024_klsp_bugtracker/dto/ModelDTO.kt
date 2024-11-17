@@ -1,9 +1,15 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto
 
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
+import io.swagger.v3.oas.annotations.media.Schema
 import java.io.Serializable
 import java.time.ZonedDateTime
 
+@Schema(
+    name = "Comment Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class CommentDTO(
     val id: Long? = null,
     val user: UserInfo,
@@ -17,12 +23,22 @@ data class CommentDTO(
     val ratings: Collection<RatingInfo> = mutableListOf(),
 ) : Serializable
 
+@Schema(
+    name = "Scrum epic Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class EpicDTO(
     val id: Long? = null, val name: String, val description: String, val deadline: ZonedDateTime,
 
     val sprints: Collection<SprintInfo> = mutableListOf()
 ) : Serializable
 
+@Schema(
+    name = "Scrum event Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class EventDTO(
     val id: Long? = null,
     val name: String,
@@ -32,6 +48,11 @@ data class EventDTO(
     val issues: Collection<IssueInfo> = mutableListOf(),
 ) : Serializable
 
+@Schema(
+    name = "File Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class FileDTO(
     val id: Long? = null,
     val filepath: String,
@@ -40,6 +61,11 @@ data class FileDTO(
     val relatedComment: CommentInfo? = null
 ) : Serializable
 
+@Schema(
+    name = "Issue Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class IssueDTO(
     val id: Long? = null,
     val title: String,
@@ -53,13 +79,27 @@ data class IssueDTO(
     val subIssues: Collection<IssueInfo> = mutableListOf(),
 ) : Serializable
 
+@Schema(
+    name = "Permission set Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class PermissionSetDTO(
     val id: Long? = null,
     val name: String,
     val assignedUsers: Collection<UserInfo> = mutableListOf(),
+    @Schema(
+        description = "This ULong represents binary sequence of permissions. " +
+                "All permissions are checking by binary and/or operations with required bitmask"
+    )
     val permissions: ULong,
 ) : Serializable
 
+@Schema(
+    name = "Comment rating Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class RatingDTO(
     val id: Long? = null,
     val comment: CommentInfo,
@@ -67,6 +107,11 @@ data class RatingDTO(
     val rating: RatingValue,
 ) : Serializable
 
+@Schema(
+    name = "Scrum sprint Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class SprintDTO(
     val id: Long? = null,
     val name: String,
@@ -78,24 +123,40 @@ data class SprintDTO(
     val issues: Collection<IssueInfo> = mutableListOf()
 ) : Serializable
 
+@Schema(
+    name = "Issue tag Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class TagDTO(
     val id: Long? = null,
     val name: String,
+    @Schema(
+        description = "For now it's unspecified how color should be stored, and we assume it " +
+                "will be depend on the end implementation"
+    )
     val color: String,
     val relatedIssues: Collection<IssueInfo> = mutableListOf()
 ) : Serializable
 
+@Schema(
+    name = "User Data object",
+    description = "This is a standard entity data object." +
+            "To avoid recursive mapping, all data objects contains a reference to serializable info objects"
+)
 data class UserDTO(
     val id: Long? = null,
     val displayName: String,
     val ratio: Double,
     val avatar: FileInfo? = null,
 
+    val permissionSet: PermissionSetInfo,
     val comments: Collection<CommentInfo> = mutableListOf(),
     val ratings: Collection<RatingInfo> = mutableListOf(),
 ) : Serializable
 
-fun toDTO(issue: Issue): IssueDTO = IssueDTO(id = issue.id,
+fun toDTO(issue: Issue): IssueDTO = IssueDTO(
+    id = issue.id,
     title = issue.title,
     comment = toInfo(issue.comment),
     ratio = issue.ratio,
@@ -103,7 +164,8 @@ fun toDTO(issue: Issue): IssueDTO = IssueDTO(id = issue.id,
     parentIssue = issue.parentIssue?.let { toInfo(it) },
     tags = issue.tags.map { toInfo(it) },
     events = issue.events.map { toInfo(it) },
-    subIssues = issue.subIssues.map { toInfo(it) })
+    subIssues = issue.subIssues.map { toInfo(it) }
+)
 
 fun toDTO(comment: Comment): CommentDTO = CommentDTO(
     id = comment.id,
@@ -117,46 +179,65 @@ fun toDTO(comment: Comment): CommentDTO = CommentDTO(
     ratings = comment.ratings.map { toInfo(it) },
 )
 
-fun toDTO(user: User) = UserDTO(id = user.id,
+fun toDTO(user: User): UserDTO = UserDTO(
+    id = user.id,
     displayName = user.displayName,
     ratio = user.ratio,
     avatar = user.avatar?.let { toInfo(it) },
     comments = user.comments.map { toInfo(it) },
-    ratings = user.ratings.map { toInfo(it) })
-
-fun toDTO(file: File) = FileDTO(
-    id = file.id, filepath = file.filepath, mimeType = file.mimeType, uploadTime = file.uploadTime
+    ratings = user.ratings.map { toInfo(it) },
+    permissionSet = toInfo(user.permissionSet)
 )
 
-fun toDTO(rating: Rating) = RatingDTO(
-    id = rating.id, user = toInfo(rating.user), rating = rating.rating, comment = toInfo(rating.comment)
+fun toDTO(file: File): FileDTO = FileDTO(
+    id = file.id,
+    filepath = file.filepath,
+    mimeType = file.mimeType,
+    uploadTime = file.uploadTime
 )
 
-fun toDTO(epic: Epic) = EpicDTO(id = epic.id,
+fun toDTO(rating: Rating): RatingDTO = RatingDTO(
+    id = rating.id,
+    user = toInfo(rating.user),
+    rating = rating.rating,
+    comment = toInfo(rating.comment)
+)
+
+fun toDTO(epic: Epic) = EpicDTO(
+    id = epic.id,
     name = epic.name,
     description = epic.description,
     deadline = epic.deadline,
-    sprints = epic.sprints.map { toInfo(it) })
+    sprints = epic.sprints.map { toInfo(it) }
+)
 
-fun toDTO(sprint: Sprint) = SprintDTO(id = sprint.id,
+fun toDTO(sprint: Sprint) = SprintDTO(
+    id = sprint.id,
     name = sprint.name,
     description = sprint.description,
     createdAt = sprint.createdAt,
     deadline = sprint.deadline,
     relatedEpic = toInfo(sprint.relatedEpic),
-    issues = sprint.issues.map { toInfo(it) })
+    issues = sprint.issues.map { toInfo(it) }
+)
 
-fun toDTO(event: Event) = EventDTO(id = event.id,
+fun toDTO(event: Event): EventDTO = EventDTO(
+    id = event.id,
     name = event.name,
     description = event.description,
     date = event.date,
     eventReview = event.eventReview,
-    issues = event.issues.map { toInfo(it) })
+    issues = event.issues.map { toInfo(it) }
+)
 
-fun toDTO(tag: Tag) =
-    TagDTO(id = tag.id, name = tag.name, color = tag.color, relatedIssues = tag.relatedIssues.map { toInfo(it) })
+fun toDTO(tag: Tag): TagDTO = TagDTO(
+    id = tag.id,
+    name = tag.name,
+    color = tag.color,
+    relatedIssues = tag.relatedIssues.map { toInfo(it) }
+)
 
-fun toDTO(permissionSet: PermissionSet) = PermissionSetDTO(
+fun toDTO(permissionSet: PermissionSet): PermissionSetDTO = PermissionSetDTO(
     id = permissionSet.id,
     name = permissionSet.name,
     assignedUsers = permissionSet.assignedUsers.map { toInfo(it) },
