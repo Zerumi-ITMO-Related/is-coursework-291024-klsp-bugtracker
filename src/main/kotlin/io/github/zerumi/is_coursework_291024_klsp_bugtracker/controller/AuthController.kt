@@ -26,7 +26,7 @@ class AuthController(val authenticationService: AuthService) {
     @PostMapping("/login")
     @Operation(
         summary = "Generates a new JWT for user requests",
-        description = "GenerateÒ a new JWT for user requests and using username and password"
+        description = "Generate a new JWT for user requests and using username and password"
     )
     fun login(@RequestBody request: AuthRequestDTO): JWTTokenResponseDTO =
         authenticationService.login(request)
