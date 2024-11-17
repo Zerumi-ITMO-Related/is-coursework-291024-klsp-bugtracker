@@ -3,6 +3,7 @@ package io.github.zerumi.is_coursework_291024_klsp_bugtracker.service
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.exception.NotFoundException
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.CommentRepository
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.IssueRepository
 import org.springframework.data.domain.PageRequest
@@ -12,7 +13,12 @@ import java.time.ZonedDateTime
 
 @Service
 class IssueService(
-    val userService: UserService, val issueRepository: IssueRepository, val commentRepository: CommentRepository
+    val userService: UserService,
+    val sprintService: SprintService,
+    val tagService: TagService,
+    val eventService: EventService,
+    val issueRepository: IssueRepository,
+    val commentRepository: CommentRepository,
 ) {
     fun getById(id: Long?): Issue = issueRepository.getReferenceById(requireNotNull(id))
 
@@ -50,4 +56,86 @@ class IssueService(
     }
 
     fun deleteIssue(issueInfo: IssueInfo) = issueRepository.deleteById(requireNotNull(issueInfo.id))
+
+    fun linkIssueToSprint(issueId: Long, sprintId: Long): Issue {
+        val issueToLink = issueRepository.getReferenceById(issueId)
+        val sprintToLink = sprintService.getById(sprintId)
+
+        issueToLink.relatedSprint?.issues?.remove(issueToLink)
+        issueToLink.relatedSprint = sprintToLink
+        sprintToLink.issues.add(issueToLink)
+
+        return issueRepository.save(issueToLink)
+    }
+
+    fun linkSubIssueToIssue(subIssueId: Long, issueId: Long): Issue {
+        val issueToLink = issueRepository.getReferenceById(subIssueId)
+        val issueToAddSubIssue = issueRepository.getReferenceById(issueId)
+
+        issueToLink.parentIssue?.subIssues?.remove(issueToLink)
+        issueToLink.parentIssue = issueToAddSubIssue
+        issueToAddSubIssue.subIssues.add(issueToLink)
+
+        return issueRepository.save(issueToLink)
+    }
+
+    fun linkIssueToTag(issueId: Long, tagId: Long): Issue {
+        val issueToAddTag = issueRepository.getReferenceById(issueId)
+        val tagToAddToIssue = tagService.getById(tagId)
+
+        issueToAddTag.tags.add(tagToAddToIssue)
+        tagToAddToIssue.relatedIssues.add(issueToAddTag)
+
+        return issueRepository.save(issueToAddTag)
+    }
+
+    fun linkIssueToEvent(issueId: Long, eventId: Long): Issue {
+        val issueToAddEvent = issueRepository.getReferenceById(issueId)
+        val eventToAddToIssue = eventService.getById(eventId)
+
+        issueToAddEvent.events.add(eventToAddToIssue)
+        eventToAddToIssue.issues.add(issueToAddEvent)
+
+        return issueRepository.save(issueToAddEvent)
+    }
+
+    fun unlinkIssueWithSprint(issueId: Long): Issue {
+        val issueToUnlink = issueRepository.getReferenceById(issueId)
+        val sprintToUnlink = issueToUnlink.relatedSprint
+
+        sprintToUnlink?.issues?.remove(issueToUnlink)
+        issueToUnlink.relatedSprint = null
+
+        return issueRepository.save(issueToUnlink)
+    }
+
+    fun unlinkSubIssueWithIssue(subIssueId: Long): Issue {
+        val issueToUnlink = issueRepository.getReferenceById(subIssueId)
+        val parentIssue = issueToUnlink.parentIssue
+
+        parentIssue?.subIssues?.remove(issueToUnlink)
+        issueToUnlink.parentIssue = null
+
+        return issueRepository.save(issueToUnlink)
+    }
+
+    fun unlinkIssueWithTag(issueId: Long, tagId: Long): Issue {
+        val issueToRemoveTag = issueRepository.getReferenceById(issueId)
+        val tagToRemoveFromIssue = tagService.getById(tagId)
+
+        issueToRemoveTag.tags.remove(tagToRemoveFromIssue)
+        tagToRemoveFromIssue.relatedIssues.remove(issueToRemoveTag)
+
+        return issueRepository.save(issueToRemoveTag)
+    }
+
+    fun unlinkIssueWithEvent(issueId: Long, eventId: Long): Issue {
+        val issueToRemoveEvent = issueRepository.getReferenceById(issueId)
+        val eventToRemoveIssue = eventService.getById(eventId)
+
+        issueToRemoveEvent.events.remove(eventToRemoveIssue)
+        eventToRemoveIssue.issues.remove(issueToRemoveEvent)
+
+        return issueRepository.save(issueToRemoveEvent)
+    }
 }

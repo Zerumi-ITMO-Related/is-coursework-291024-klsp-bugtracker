@@ -23,7 +23,7 @@ import java.io.Serializable
 @Table(name = "CourseTag", schema = "s367837")
 class Tag(
     @Id @GeneratedValue @Column(name = "tag_id") var id: Long? = null,
-    @Column(name = "tag_name") var name: String,
+    @Column(name = "tag_name", unique = true) var name: String,
     @Column(name = "tag_color") var color: String,
     @ManyToMany(mappedBy = "tags") var relatedIssues: MutableCollection<Issue> = mutableListOf()
 ) : Serializable

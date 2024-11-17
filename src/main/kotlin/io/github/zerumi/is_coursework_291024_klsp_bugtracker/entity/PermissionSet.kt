@@ -48,6 +48,7 @@ enum class Permissions {
     MANAGE_SPRINT,
     MANAGE_EVENTS,
     MANAGE_TAGS,
+    MANAGE_ISSUE,
     ;
 
     private val value: ULong = PermissionValueGenerator.nextValue
