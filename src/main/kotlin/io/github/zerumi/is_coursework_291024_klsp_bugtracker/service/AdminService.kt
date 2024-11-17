@@ -6,7 +6,9 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.PermissionSe
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.User
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.PermissionSetRepository
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.UserRepository
+import org.springframework.stereotype.Service
 
+@Service
 class AdminService(
     private val permissionSetRepository: PermissionSetRepository,
     private val userRepository: UserRepository,
