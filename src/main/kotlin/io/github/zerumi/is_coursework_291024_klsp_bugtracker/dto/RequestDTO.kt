@@ -6,7 +6,7 @@ import java.time.ZonedDateTime
 
 data class AuthRequestDTO(val login: String, val password: String) : Serializable
 
-data class RegisterRequestDTO(val username: String, val displayName: String, val password: String)
+data class RegisterRequestDTO(val username: String, val displayName: String, val email: String, val password: String)
 
 data class IssueRequestDTO(
     val title: String, val content: String, val attachedFilesIds: List<Long>

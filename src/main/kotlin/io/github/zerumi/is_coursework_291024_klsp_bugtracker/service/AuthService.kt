@@ -21,6 +21,7 @@ class AuthService(
     fun register(request: RegisterRequestDTO): JWTTokenResponseDTO {
         val user = User(
             displayName = request.displayName,
+            email = request.email,
             login = request.username,
             pass = passwordEncoder.encode(request.password),
             permissionSet = DefaultPermissionSet.DEFAULT_PERMISSION_SET,

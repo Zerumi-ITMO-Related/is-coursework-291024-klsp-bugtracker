@@ -23,6 +23,8 @@ import java.io.Serializable
 class User(
     @Id @GeneratedValue @Column(name = "user_id") var id: Long? = null,
     @Column(name = "display_name") var displayName: String,
+    @Column(name = "user_ratio") var ratio: Double = 100.0,
+    @Column(name = "email") var email: String,
     @Column(name = "login") var login: String,
     @Column(name = "password") var pass: String,
     @OneToOne @JoinColumn(name = "avatar_file_id") var avatar: File? = null,

@@ -43,6 +43,7 @@ data class FileDTO(
 data class IssueDTO(
     val id: Long? = null,
     val title: String,
+    val ratio: Double,
     val comment: CommentInfo,
     val relatedSprint: SprintInfo?,
     val parentIssue: IssueInfo?,
@@ -87,6 +88,7 @@ data class TagDTO(
 data class UserDTO(
     val id: Long? = null,
     val displayName: String,
+    val ratio: Double,
     val avatar: FileInfo? = null,
 
     val comments: Collection<CommentInfo> = mutableListOf(),
@@ -96,6 +98,7 @@ data class UserDTO(
 fun toDTO(issue: Issue): IssueDTO = IssueDTO(id = issue.id,
     title = issue.title,
     comment = toInfo(issue.comment),
+    ratio = issue.ratio,
     relatedSprint = issue.relatedSprint?.let { toInfo(it) },
     parentIssue = issue.parentIssue?.let { toInfo(it) },
     tags = issue.tags.map { toInfo(it) },
@@ -116,6 +119,7 @@ fun toDTO(comment: Comment): CommentDTO = CommentDTO(
 
 fun toDTO(user: User) = UserDTO(id = user.id,
     displayName = user.displayName,
+    ratio = user.ratio,
     avatar = user.avatar?.let { toInfo(it) },
     comments = user.comments.map { toInfo(it) },
     ratings = user.ratings.map { toInfo(it) })
