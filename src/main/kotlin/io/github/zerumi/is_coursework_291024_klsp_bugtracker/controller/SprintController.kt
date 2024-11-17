@@ -36,4 +36,22 @@ class SprintController(
     @SecurityRequirement(name = "Bearer Authentication")
     fun deleteSprint(@RequestBody sprintInfo: SprintInfo): Unit =
         sprintService.deleteSprint(sprintInfo)
+
+    @PutMapping("{sprintId}/toEpic/{epicId}")
+    @RequirePermission(Permissions.MANAGE_SPRINT)
+    @SecurityRequirement(name = "Bearer Authentication")
+    fun linkSprintWithEpic(@PathVariable sprintId: Long, @PathVariable epicId: Long): SprintDTO =
+        toDTO(sprintService.linkSprintToEpic(sprintId, epicId))
+
+    @PutMapping("{sprintId}/toIssue/{issueId}")
+    @RequirePermission(Permissions.MANAGE_SPRINT)
+    @SecurityRequirement(name = "Bearer Authentication")
+    fun linkSprintWithIssue(@PathVariable sprintId: Long, @PathVariable issueId: Long): SprintDTO =
+        toDTO(sprintService.linkSprintWithIssue(sprintId, issueId))
+
+    @DeleteMapping("{sprintId}/fromIssue/{issueId}")
+    @RequirePermission(Permissions.MANAGE_SPRINT)
+    @SecurityRequirement(name = "Bearer Authentication")
+    fun unlinkSprintWithIssue(@PathVariable sprintId: Long, @PathVariable issueId: Long): SprintDTO =
+        toDTO(sprintService.unlinkSprintWithIssue(sprintId, issueId))
 }
