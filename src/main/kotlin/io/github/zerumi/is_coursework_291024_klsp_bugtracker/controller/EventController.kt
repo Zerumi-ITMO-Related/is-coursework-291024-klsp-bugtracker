@@ -40,4 +40,16 @@ class EventController(
     @SecurityRequirement(name = "Bearer Authentication")
     fun deleteEvent(@RequestBody eventInfo: EventInfo): Unit =
         eventService.deleteEvent(eventInfo)
+
+    @PutMapping("{eventId}/toIssue/{issueId}")
+    @RequirePermission(Permissions.MANAGE_EVENTS)
+    @SecurityRequirement(name = "Bearer Authentication")
+    fun linkEventWithIssue(@PathVariable eventId: Long, @PathVariable issueId: Long): EventDTO =
+        toDTO(eventService.linkEventWithIssue(eventId, issueId))
+
+    @DeleteMapping("{eventId}/fromIssue/{issueId}")
+    @RequirePermission(Permissions.MANAGE_EVENTS)
+    @SecurityRequirement(name = "Bearer Authentication")
+    fun unlinkEventWithIssue(@PathVariable eventId: Long, @PathVariable issueId: Long): EventDTO =
+        toDTO(eventService.unlinkEventWithIssue(eventId, issueId))
 }

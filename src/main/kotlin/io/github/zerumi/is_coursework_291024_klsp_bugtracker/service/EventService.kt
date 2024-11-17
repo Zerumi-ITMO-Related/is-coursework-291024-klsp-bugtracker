@@ -4,12 +4,16 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.EventInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.EventRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Event
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.EventRepository
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.IssueRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
-class EventService(val eventRepository: EventRepository) {
+class EventService(
+    val eventRepository: EventRepository,
+    val issueRepository: IssueRepository,
+) {
     fun getById(id: Long?) = eventRepository.getReferenceById(requireNotNull(id))
 
     fun getEvents(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "name"): List<Event> =
@@ -38,4 +42,24 @@ class EventService(val eventRepository: EventRepository) {
     }
 
     fun deleteEvent(eventInfo: EventInfo) = eventRepository.deleteById(requireNotNull(eventInfo.id))
+
+    fun linkEventWithIssue(eventId: Long, issueId: Long): Event {
+        val eventToLinkWithIssue = eventRepository.getReferenceById(eventId)
+        val issueToLinkWithEvent = issueRepository.getReferenceById(issueId)
+
+        eventToLinkWithIssue.issues.add(issueToLinkWithEvent)
+        issueToLinkWithEvent.events.add(eventToLinkWithIssue)
+
+        return eventRepository.save(eventToLinkWithIssue)
+    }
+
+    fun unlinkEventWithIssue(eventId: Long, issueId: Long): Event {
+        val eventToUnlinkWithIssue = eventRepository.getReferenceById(eventId)
+        val issueToUnlinkWithEvent = issueRepository.getReferenceById(issueId)
+
+        eventToUnlinkWithIssue.issues.remove(issueToUnlinkWithEvent)
+        issueToUnlinkWithEvent.events.remove(eventToUnlinkWithIssue)
+
+        return eventRepository.save(eventToUnlinkWithIssue)
+    }
 }
