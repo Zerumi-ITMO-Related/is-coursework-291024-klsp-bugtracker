@@ -6,7 +6,8 @@ Kotlin Language Server Protocol Implementation Bugtracker
 
 ## What is this?
 
-This is back-end of bugtracker aimed for Kotlin Language Server. Part of ITMO University 3rd year term paper.
+This is back-end of bugtracker aimed for Kotlin Language Server. Part of ITMO University 3rd year term paper.  
+Built with Spring Boot (WebMVC + Data JPA + Security).
 
 ---
 
@@ -27,4 +28,8 @@ This is back-end of bugtracker aimed for Kotlin Language Server. Part of ITMO Un
 
 3. Build using Gradle `gradle bootRun`/`gradle bootJar`. The database schema should be generated automatically.
 
+---
 
+## Documentation
+
+All endpoints are documented with `springdoc` + Swagger UI and available on address `http://localhost:8080/swagger-ui/index.html#/` after application start.
