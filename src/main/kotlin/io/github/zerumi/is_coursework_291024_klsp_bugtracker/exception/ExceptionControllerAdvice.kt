@@ -2,8 +2,6 @@ package io.github.zerumi.is_coursework_291024_klsp_bugtracker.exception
 
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.security.SignatureException
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.persistence.EntityNotFoundException
 import jakarta.validation.ConstraintViolationException
 import org.springframework.boot.json.JsonParseException
@@ -14,9 +12,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import java.util.*

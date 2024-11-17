@@ -158,6 +158,5 @@ class IssueService(
         const val INCREASE_PER_LIKE = 5.0
         const val INCREASE_PER_DISLIKE = -3.0
         const val INCREASE_PER_COMMENT = 3.0
-
     }
 }
