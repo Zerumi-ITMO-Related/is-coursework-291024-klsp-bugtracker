@@ -53,7 +53,7 @@ class SprintService(
         return sprintRepository.save(sprintToLinkWithEpic)
     }
 
-    fun linkSprintWithIssue(sprintId: Long, issueId: Long): Sprint {
+    fun linkSprintToIssue(sprintId: Long, issueId: Long): Sprint {
         val sprintToLinkWithIssue = sprintRepository.getReferenceById(sprintId)
         val issueToLinkWithSprint = issueRepository.getReferenceById(issueId)
 
@@ -63,7 +63,7 @@ class SprintService(
         return sprintRepository.save(sprintToLinkWithIssue)
     }
 
-    fun unlinkSprintWithIssue(sprintId: Long, issueId: Long): Sprint {
+    fun unlinkSprintFromIssue(sprintId: Long, issueId: Long): Sprint {
         val sprintToUnlinkWithIssue = sprintRepository.getReferenceById(sprintId)
         val issueToUnlinkWithSprint = issueRepository.getReferenceById(issueId)
 

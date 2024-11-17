@@ -7,40 +7,45 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.toDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Permissions
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.TagService
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/tag")
+@Tag(name = "Issue Tag API", description = "Endpoints for managing issue tags")
 class TagController(
     val tagService: TagService
 ) {
     @GetMapping("/{id}")
-    fun getTag(@PathVariable id: Long): TagDTO =
-        toDTO(tagService.getById(id))
+    @Operation(summary = "Get an issue tag by its id")
+    fun getTag(@PathVariable id: Long): TagDTO = toDTO(tagService.getById(id))
 
     @PostMapping
-    @RequirePermission(Permissions.MANAGE_TAGS)
+    @RequirePermission(Permissions.MANAGE_TAG)
+    @Operation(
+        summary = "Create issue tag",
+        description = "This operation requires MANAGE_TAG permission",
+    )
     @SecurityRequirement(name = "Bearer Authentication")
-    fun createTag(@RequestBody tagRequestDTO: TagRequestDTO): TagDTO =
-        toDTO(tagService.createTag(tagRequestDTO))
+    fun createTag(@RequestBody tagRequestDTO: TagRequestDTO): TagDTO = toDTO(tagService.createTag(tagRequestDTO))
 
     @PutMapping
-    @RequirePermission(Permissions.MANAGE_TAGS)
+    @RequirePermission(Permissions.MANAGE_TAG)
+    @Operation(
+        summary = "Update issue tag",
+        description = "This operation requires MANAGE_TAG permission",
+    )
     @SecurityRequirement(name = "Bearer Authentication")
-    fun updateTag(@RequestBody tagInfo: TagInfo): TagDTO =
-        toDTO(tagService.updateTag(tagInfo))
+    fun updateTag(@RequestBody tagInfo: TagInfo): TagDTO = toDTO(tagService.updateTag(tagInfo))
 
     @DeleteMapping
-    @RequirePermission(Permissions.MANAGE_TAGS)
+    @RequirePermission(Permissions.MANAGE_TAG)
+    @Operation(
+        summary = "Delete issue tag",
+        description = "This operation requires MANAGE_TAG permission",
+    )
     @SecurityRequirement(name = "Bearer Authentication")
-    fun deleteTag(@RequestBody tagInfo: TagInfo): Unit =
-        tagService.deleteTag(tagInfo)
+    fun deleteTag(@RequestBody tagInfo: TagInfo): Unit = tagService.deleteTag(tagInfo)
 }

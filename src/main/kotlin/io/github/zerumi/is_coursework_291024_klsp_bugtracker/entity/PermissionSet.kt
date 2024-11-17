@@ -1,7 +1,6 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity
 
 import jakarta.persistence.*
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.GrantedAuthority
 import java.io.Serializable
 
@@ -38,10 +37,11 @@ enum class Permissions {
     PRIVILEGED,
     CREATE_ISSUE, UPDATE_ANY_ISSUE,
     CREATE_COMMENT, UPDATE_ANY_COMMENT,
+    LEAVE_REACTIONS,
     MANAGE_EPIC,
     MANAGE_SPRINT,
-    MANAGE_EVENTS,
-    MANAGE_TAGS,
+    MANAGE_EVENT,
+    MANAGE_TAG,
     MANAGE_ISSUE,
     MANAGE_USER_PERMISSIONS,
     ;

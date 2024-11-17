@@ -98,7 +98,7 @@ class IssueService(
         return issueRepository.save(issueToAddEvent)
     }
 
-    fun unlinkIssueWithSprint(issueId: Long): Issue {
+    fun unlinkIssueFromSprint(issueId: Long): Issue {
         val issueToUnlink = issueRepository.getReferenceById(issueId)
         val sprintToUnlink = issueToUnlink.relatedSprint
 
@@ -108,7 +108,7 @@ class IssueService(
         return issueRepository.save(issueToUnlink)
     }
 
-    fun unlinkSubIssueWithIssue(subIssueId: Long): Issue {
+    fun unlinkSubIssueFromIssue(subIssueId: Long): Issue {
         val issueToUnlink = issueRepository.getReferenceById(subIssueId)
         val parentIssue = issueToUnlink.parentIssue
 
@@ -118,7 +118,7 @@ class IssueService(
         return issueRepository.save(issueToUnlink)
     }
 
-    fun unlinkIssueWithTag(issueId: Long, tagId: Long): Issue {
+    fun unlinkIssueFromTag(issueId: Long, tagId: Long): Issue {
         val issueToRemoveTag = issueRepository.getReferenceById(issueId)
         val tagToRemoveFromIssue = tagRepository.getReferenceById(tagId)
 
@@ -128,7 +128,7 @@ class IssueService(
         return issueRepository.save(issueToRemoveTag)
     }
 
-    fun unlinkIssueWithEvent(issueId: Long, eventId: Long): Issue {
+    fun unlinkIssueFromEvent(issueId: Long, eventId: Long): Issue {
         val issueToRemoveEvent = issueRepository.getReferenceById(issueId)
         val eventToRemoveIssue = eventRepository.getReferenceById(eventId)
 

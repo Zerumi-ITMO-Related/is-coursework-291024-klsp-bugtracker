@@ -43,7 +43,7 @@ class EventService(
 
     fun deleteEvent(eventInfo: EventInfo) = eventRepository.deleteById(requireNotNull(eventInfo.id))
 
-    fun linkEventWithIssue(eventId: Long, issueId: Long): Event {
+    fun linkEventToIssue(eventId: Long, issueId: Long): Event {
         val eventToLinkWithIssue = eventRepository.getReferenceById(eventId)
         val issueToLinkWithEvent = issueRepository.getReferenceById(issueId)
 
@@ -53,7 +53,7 @@ class EventService(
         return eventRepository.save(eventToLinkWithIssue)
     }
 
-    fun unlinkEventWithIssue(eventId: Long, issueId: Long): Event {
+    fun unlinkEventFromIssue(eventId: Long, issueId: Long): Event {
         val eventToUnlinkWithIssue = eventRepository.getReferenceById(eventId)
         val issueToUnlinkWithEvent = issueRepository.getReferenceById(issueId)
 
