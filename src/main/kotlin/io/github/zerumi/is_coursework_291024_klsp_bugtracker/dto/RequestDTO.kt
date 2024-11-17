@@ -46,3 +46,8 @@ data class TagRequestDTO(
     val name: String,
     val color: String,
 ) : Serializable
+
+data class PermissionSetRequestDTO(
+    val name: String,
+    val permissions: ULong,
+) : Serializable

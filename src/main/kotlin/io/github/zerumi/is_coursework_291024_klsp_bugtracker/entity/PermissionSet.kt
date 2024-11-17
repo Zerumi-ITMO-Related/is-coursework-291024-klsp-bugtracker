@@ -34,12 +34,6 @@ class PermissionSet(
 fun checkPermission(permissions: ULong, testPermission: Permissions): Boolean =
     testPermission and permissions != 0.toULong()
 
-fun requireOwnership(userId: Long, testObjUserId: Long, orElse: () -> Unit) =
-    if (userId != testObjUserId) orElse() else Unit
-
-fun requirePermissions(permissions: ULong, testPermissions: ULong) =
-    if (testPermissions and permissions == 0.toULong()) throw AccessDeniedException("Permission denied") else Unit
-
 enum class Permissions {
     PRIVILEGED,
     CREATE_ISSUE, UPDATE_ANY_ISSUE,
@@ -49,6 +43,7 @@ enum class Permissions {
     MANAGE_EVENTS,
     MANAGE_TAGS,
     MANAGE_ISSUE,
+    MANAGE_USER_PERMISSIONS,
     ;
 
     private val value: ULong = PermissionValueGenerator.nextValue
