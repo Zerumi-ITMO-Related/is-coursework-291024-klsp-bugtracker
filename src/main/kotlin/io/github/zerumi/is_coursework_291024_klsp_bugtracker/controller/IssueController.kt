@@ -118,7 +118,7 @@ class IssueController(
     @DeleteMapping("fromIssue/{issueId}")
     @RequirePermission(Permissions.MANAGE_ISSUE)
     @Operation(
-        summary = "Unlink subIssue from issue",
+        summary = "Unlink issue from parent issue",
         description = "This operation requires MANAGE_ISSUE permission"
     )
     @SecurityRequirement(name = "Bearer Authentication")
