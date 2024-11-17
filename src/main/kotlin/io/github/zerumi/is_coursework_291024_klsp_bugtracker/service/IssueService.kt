@@ -3,9 +3,7 @@ package io.github.zerumi.is_coursework_291024_klsp_bugtracker.service
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.exception.NotFoundException
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.CommentRepository
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.IssueRepository
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.*
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -14,9 +12,9 @@ import java.time.ZonedDateTime
 @Service
 class IssueService(
     val userService: UserService,
-    val sprintService: SprintService,
-    val tagService: TagService,
-    val eventService: EventService,
+    val sprintRepository: SprintRepository,
+    val tagRepository: TagRepository,
+    val eventRepository: EventRepository,
     val issueRepository: IssueRepository,
     val commentRepository: CommentRepository,
 ) {
@@ -59,7 +57,7 @@ class IssueService(
 
     fun linkIssueToSprint(issueId: Long, sprintId: Long): Issue {
         val issueToLink = issueRepository.getReferenceById(issueId)
-        val sprintToLink = sprintService.getById(sprintId)
+        val sprintToLink = sprintRepository.getReferenceById(sprintId)
 
         issueToLink.relatedSprint?.issues?.remove(issueToLink)
         issueToLink.relatedSprint = sprintToLink
@@ -81,7 +79,7 @@ class IssueService(
 
     fun linkIssueToTag(issueId: Long, tagId: Long): Issue {
         val issueToAddTag = issueRepository.getReferenceById(issueId)
-        val tagToAddToIssue = tagService.getById(tagId)
+        val tagToAddToIssue = tagRepository.getReferenceById(tagId)
 
         issueToAddTag.tags.add(tagToAddToIssue)
         tagToAddToIssue.relatedIssues.add(issueToAddTag)
@@ -91,7 +89,7 @@ class IssueService(
 
     fun linkIssueToEvent(issueId: Long, eventId: Long): Issue {
         val issueToAddEvent = issueRepository.getReferenceById(issueId)
-        val eventToAddToIssue = eventService.getById(eventId)
+        val eventToAddToIssue = eventRepository.getReferenceById(eventId)
 
         issueToAddEvent.events.add(eventToAddToIssue)
         eventToAddToIssue.issues.add(issueToAddEvent)
@@ -121,7 +119,7 @@ class IssueService(
 
     fun unlinkIssueWithTag(issueId: Long, tagId: Long): Issue {
         val issueToRemoveTag = issueRepository.getReferenceById(issueId)
-        val tagToRemoveFromIssue = tagService.getById(tagId)
+        val tagToRemoveFromIssue = tagRepository.getReferenceById(tagId)
 
         issueToRemoveTag.tags.remove(tagToRemoveFromIssue)
         tagToRemoveFromIssue.relatedIssues.remove(issueToRemoveTag)
@@ -131,7 +129,7 @@ class IssueService(
 
     fun unlinkIssueWithEvent(issueId: Long, eventId: Long): Issue {
         val issueToRemoveEvent = issueRepository.getReferenceById(issueId)
-        val eventToRemoveIssue = eventService.getById(eventId)
+        val eventToRemoveIssue = eventRepository.getReferenceById(eventId)
 
         issueToRemoveEvent.events.remove(eventToRemoveIssue)
         eventToRemoveIssue.issues.remove(issueToRemoveEvent)
