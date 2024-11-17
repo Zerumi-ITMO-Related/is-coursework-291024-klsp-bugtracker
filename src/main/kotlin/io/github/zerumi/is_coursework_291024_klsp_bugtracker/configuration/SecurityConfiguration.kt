@@ -40,7 +40,7 @@ class SecurityConfiguration(
         http.csrf { csrf ->
             csrf.ignoringRequestMatchers("/**")
         }
-        http.headers { headersConfigurer -> headersConfigurer.frameOptions { it.sameOrigin() } }
+        http.headers { headersConfigure -> headersConfigure.frameOptions { it.sameOrigin() } }
 
         val corsConfiguration = CorsConfiguration()
 
@@ -56,18 +56,21 @@ class SecurityConfiguration(
 
         http.authorizeHttpRequests { ar ->
             ar
+                .requestMatchers(mvc.pattern("/api/v1/auth/**")).permitAll()
                 .requestMatchers(mvc.pattern("/api/v1/issue/page/**")).permitAll()
                 .requestMatchers(mvc.pattern("/api/v1/event/page/**")).permitAll()
                 .requestMatchers(mvc.pattern("/api/v1/epic/page/**")).permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/tag/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/admin/permissionSet/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/sprint/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/issue/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/event/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/epic/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/comment/**").permitAll()
-                .requestMatchers(mvc.pattern("/api/v1/auth/**")).permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/tag/**").permitAll()
                 .requestMatchers(
-                    mvc.pattern("/swagger-ui/**"), mvc.pattern("/swagger-resources/*"), mvc.pattern("/v3/api-docs/**")
+                    mvc.pattern("/swagger-ui/**"),
+                    mvc.pattern("/swagger-resources/*"),
+                    mvc.pattern("/v3/api-docs/**")
                 ).permitAll()
                 .anyRequest().authenticated()
         }.httpBasic(Customizer.withDefaults())
