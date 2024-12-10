@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*
 class AdminController(
     val adminService: AdminService,
 ) {
+    @GetMapping("/permissionSet")
+    @Operation(summary = "Get all permission sets")
+    fun getPermissionSets(): List<PermissionSetDTO> =
+        adminService.getPermissionSets().map { toDTO(it) }
+
     @GetMapping("permissionSet/{id}")
     @Operation(summary = "Get a permission set by its id")
     fun getPermissionSet(@PathVariable id: Long): PermissionSetDTO =

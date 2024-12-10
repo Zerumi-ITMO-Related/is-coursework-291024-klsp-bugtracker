@@ -6,6 +6,9 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Sprint
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.EpicRepository
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.IssueRepository
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.SprintRepository
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 
@@ -16,6 +19,9 @@ class SprintService(
     val epicRepository: EpicRepository,
     val issueRepository: IssueRepository,
 ) {
+    fun getSprints(pageNo: Int, epicsPerPage: Int, sortProperty: String = "createdAt"): List<Sprint> =
+        sprintRepository.findAll(PageRequest.of(pageNo, epicsPerPage, Sort.by(sortProperty))).toList()
+
     fun getById(id: Long?) = sprintRepository.getReferenceById(requireNotNull(id))
 
     fun createSprint(sprintRequestDTO: SprintRequestDTO): Sprint {

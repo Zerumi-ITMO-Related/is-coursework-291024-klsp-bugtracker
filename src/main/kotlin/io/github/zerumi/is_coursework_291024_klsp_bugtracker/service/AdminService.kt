@@ -45,4 +45,7 @@ class AdminService(
 
         return userRepository.save(userToLinkPermissionSet)
     }
+
+    fun getPermissionSets(): List<PermissionSet> =
+        permissionSetRepository.findAll()
 }

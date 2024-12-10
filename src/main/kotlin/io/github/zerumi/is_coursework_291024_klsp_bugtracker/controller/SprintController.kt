@@ -1,10 +1,7 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.controller
 
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.annotation.RequirePermission
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.SprintDTO
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.SprintInfo
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.SprintRequestDTO
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.toDTO
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.*
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Permissions
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.SprintService
 import io.swagger.v3.oas.annotations.Operation
@@ -18,6 +15,11 @@ import org.springframework.web.bind.annotation.*
 class SprintController(
     val sprintService: SprintService
 ) {
+    @GetMapping("/page/{pageNo}/{epicsPerPage}")
+    @Operation(summary = "Get epics in paged view")
+    fun getSprints(@PathVariable pageNo: Int, @PathVariable epicsPerPage: Int): List<SprintDTO> =
+        sprintService.getSprints(pageNo, epicsPerPage).map { toDTO(it) }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get a sprint by its id")
     fun getSprint(@PathVariable id: Long): SprintDTO =
