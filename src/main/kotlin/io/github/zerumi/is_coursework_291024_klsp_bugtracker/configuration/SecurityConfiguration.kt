@@ -25,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
 
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -37,6 +38,11 @@ class SecurityConfiguration(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.cors { it.disable() }.csrf { it.disable() }
+        http.cors { httpSecurityCorsConfigurer ->
+            httpSecurityCorsConfigurer.configurationSource { request ->
+                CorsConfiguration().applyPermitDefaultValues()
+            }
+        }
         http.csrf { csrf ->
             csrf.ignoringRequestMatchers("/**")
         }
