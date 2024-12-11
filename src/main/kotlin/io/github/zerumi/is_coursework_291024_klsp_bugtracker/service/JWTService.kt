@@ -16,6 +16,7 @@ class JWTService {
     fun generateToken(user: User): String {
         val claims = mapOf(
             "id" to user.id,
+            "displayName" to user.displayName
         )
 
         return generateToken(claims, user)
