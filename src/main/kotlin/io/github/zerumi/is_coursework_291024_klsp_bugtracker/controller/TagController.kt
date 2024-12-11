@@ -1,10 +1,7 @@
 package io.github.zerumi.is_coursework_291024_klsp_bugtracker.controller
 
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.annotation.RequirePermission
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagDTO
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagInfo
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagRequestDTO
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.toDTO
+import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.*
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Permissions
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.service.TagService
 import io.swagger.v3.oas.annotations.Operation
@@ -18,6 +15,11 @@ import org.springframework.web.bind.annotation.*
 class TagController(
     val tagService: TagService
 ) {
+    @GetMapping("/page/{pageNo}/{tagsPerPage}")
+    @Operation(summary = "Get tags in paged view")
+    fun getTags(@PathVariable pageNo: Int, @PathVariable epicsPerPage: Int): List<TagDTO> =
+        tagService.getTags(pageNo, epicsPerPage).map { toDTO(it) }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get an issue tag by its id")
     fun getTag(@PathVariable id: Long): TagDTO = toDTO(tagService.getById(id))
