@@ -91,7 +91,7 @@ class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun globalExceptionHandler(ex: Exception, request: WebRequest): ResponseEntity<ErrorMessage> {
         val message =
-            ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), Date(), request.getDescription(false), ex.message)
+            ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR.value(), Date(), request.getDescription(false), "${ex.message} / ${ex.javaClass}")
         return ResponseEntity(message, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
