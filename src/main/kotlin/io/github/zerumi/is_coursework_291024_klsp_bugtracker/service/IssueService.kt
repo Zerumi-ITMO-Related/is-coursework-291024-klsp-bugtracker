@@ -4,6 +4,7 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.IssueRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.*
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.*
+import org.springframework.dao.CannotAcquireLockException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.scheduling.annotation.Scheduled
@@ -26,7 +27,7 @@ class IssueService(
     fun getIssues(pageNumber: Int, issuesPerPage: Int): List<Issue> =
         issueRepository.findByParentIssueIsNull(PageRequest.of(pageNumber, issuesPerPage, Sort.by("ratio").descending()))
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun createIssue(issueModelDTO: IssueRequestDTO): Issue {
         val comment = Comment(
             user = userService.getCurrentUser(),
@@ -49,7 +50,7 @@ class IssueService(
         return issueRepository.save(newIssue)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun updateIssue(issueInfo: IssueInfo): Issue {
         val issueToUpdate = issueRepository.getReferenceById(requireNotNull(issueInfo.id))
 
@@ -58,10 +59,10 @@ class IssueService(
         return issueRepository.save(issueToUpdate)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun deleteIssue(issueInfo: IssueInfo) = issueRepository.deleteById(requireNotNull(issueInfo.id))
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun linkIssueToSprint(issueId: Long, sprintId: Long): Issue {
         val issueToLink = issueRepository.getReferenceById(issueId)
         val sprintToLink = sprintRepository.getReferenceById(sprintId)
@@ -73,7 +74,7 @@ class IssueService(
         return issueRepository.save(issueToLink)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun linkSubIssueToIssue(subIssueId: Long, issueId: Long): Issue {
         val issueToLink = issueRepository.getReferenceById(subIssueId)
         val issueToAddSubIssue = issueRepository.getReferenceById(issueId)
@@ -85,7 +86,7 @@ class IssueService(
         return issueRepository.save(issueToLink)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun linkIssueToTag(issueId: Long, tagId: Long): Issue {
         val issueToAddTag = issueRepository.getReferenceById(issueId)
         val tagToAddToIssue = tagRepository.getReferenceById(tagId)
@@ -96,7 +97,7 @@ class IssueService(
         return issueRepository.save(issueToAddTag)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun linkIssueToEvent(issueId: Long, eventId: Long): Issue {
         val issueToAddEvent = issueRepository.getReferenceById(issueId)
         val eventToAddToIssue = eventRepository.getReferenceById(eventId)
@@ -107,7 +108,7 @@ class IssueService(
         return issueRepository.save(issueToAddEvent)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun unlinkIssueFromSprint(issueId: Long): Issue {
         val issueToUnlink = issueRepository.getReferenceById(issueId)
         val sprintToUnlink = issueToUnlink.relatedSprint
@@ -118,7 +119,7 @@ class IssueService(
         return issueRepository.save(issueToUnlink)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun unlinkSubIssueFromIssue(subIssueId: Long): Issue {
         val issueToUnlink = issueRepository.getReferenceById(subIssueId)
         val parentIssue = issueToUnlink.parentIssue
@@ -129,7 +130,7 @@ class IssueService(
         return issueRepository.save(issueToUnlink)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun unlinkIssueFromTag(issueId: Long, tagId: Long): Issue {
         val issueToRemoveTag = issueRepository.getReferenceById(issueId)
         val tagToRemoveFromIssue = tagRepository.getReferenceById(tagId)
@@ -140,7 +141,7 @@ class IssueService(
         return issueRepository.save(issueToRemoveTag)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun unlinkIssueFromEvent(issueId: Long, eventId: Long): Issue {
         val issueToRemoveEvent = issueRepository.getReferenceById(issueId)
         val eventToRemoveIssue = eventRepository.getReferenceById(eventId)

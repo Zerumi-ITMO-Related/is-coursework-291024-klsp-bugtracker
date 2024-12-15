@@ -4,6 +4,7 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagRequestDTO
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Tag
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.TagRepository
+import org.springframework.dao.CannotAcquireLockException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -19,7 +20,7 @@ class TagService(
 
     fun getById(id: Long?) = tagRepository.getReferenceById(requireNotNull(id))
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun createTag(tagRequestDTO: TagRequestDTO): Tag {
         val tag = Tag(
             name = tagRequestDTO.name,
@@ -29,7 +30,7 @@ class TagService(
         return tagRepository.save(tag)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun updateTag(tagInfo: TagInfo): Tag {
         val tagToUpdate = tagRepository.getReferenceById(requireNotNull(tagInfo.id))
 
@@ -39,6 +40,6 @@ class TagService(
         return tagRepository.save(tagToUpdate)
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = [CannotAcquireLockException::class])
     fun deleteTag(tagInfo: TagInfo) = tagRepository.deleteById(requireNotNull(tagInfo.id))
 }
