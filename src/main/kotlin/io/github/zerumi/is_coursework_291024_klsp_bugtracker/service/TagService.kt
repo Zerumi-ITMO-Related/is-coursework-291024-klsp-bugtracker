@@ -2,12 +2,13 @@ package io.github.zerumi.is_coursework_291024_klsp_bugtracker.service
 
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagInfo
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.dto.TagRequestDTO
-import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Epic
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.Tag
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.TagRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TagService(
@@ -18,6 +19,7 @@ class TagService(
 
     fun getById(id: Long?) = tagRepository.getReferenceById(requireNotNull(id))
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun createTag(tagRequestDTO: TagRequestDTO): Tag {
         val tag = Tag(
             name = tagRequestDTO.name,
@@ -27,6 +29,7 @@ class TagService(
         return tagRepository.save(tag)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun updateTag(tagInfo: TagInfo): Tag {
         val tagToUpdate = tagRepository.getReferenceById(requireNotNull(tagInfo.id))
 
@@ -36,5 +39,6 @@ class TagService(
         return tagRepository.save(tagToUpdate)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun deleteTag(tagInfo: TagInfo) = tagRepository.deleteById(requireNotNull(tagInfo.id))
 }

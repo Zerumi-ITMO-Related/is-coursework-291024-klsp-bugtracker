@@ -8,6 +8,8 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.IssueRep
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class EventService(
@@ -19,6 +21,7 @@ class EventService(
     fun getEvents(pageNumber: Int, issuesPerPage: Int, sortProperty: String = "name"): List<Event> =
         eventRepository.findAll(PageRequest.of(pageNumber, issuesPerPage, Sort.by(sortProperty))).toList()
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun createEvent(eventRequestDTO: EventRequestDTO): Event {
         val event = Event(
             name = eventRequestDTO.name,
@@ -30,6 +33,7 @@ class EventService(
         return eventRepository.save(event)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun updateEvent(eventInfo: EventInfo): Event {
         val eventToUpdate = eventRepository.getReferenceById(requireNotNull(eventInfo.id))
 
@@ -41,8 +45,10 @@ class EventService(
         return eventRepository.save(eventToUpdate)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun deleteEvent(eventInfo: EventInfo) = eventRepository.deleteById(requireNotNull(eventInfo.id))
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun linkEventToIssue(eventId: Long, issueId: Long): Event {
         val eventToLinkWithIssue = eventRepository.getReferenceById(eventId)
         val issueToLinkWithEvent = issueRepository.getReferenceById(issueId)
@@ -53,6 +59,7 @@ class EventService(
         return eventRepository.save(eventToLinkWithIssue)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun unlinkEventFromIssue(eventId: Long, issueId: Long): Event {
         val eventToUnlinkWithIssue = eventRepository.getReferenceById(eventId)
         val issueToUnlinkWithEvent = issueRepository.getReferenceById(issueId)

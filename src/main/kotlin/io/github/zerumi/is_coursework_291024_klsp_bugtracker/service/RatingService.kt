@@ -6,6 +6,8 @@ import io.github.zerumi.is_coursework_291024_klsp_bugtracker.entity.RatingValue
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.CommentRepository
 import io.github.zerumi.is_coursework_291024_klsp_bugtracker.repository.RatingRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RatingService(
@@ -14,6 +16,7 @@ class RatingService(
     val userService: UserService,
     val issueService: IssueService,
 ) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun createRating(ratingRequestDTO: RatingRequestDTO): Rating {
         val comment = commentRepository.getReferenceById(ratingRequestDTO.commentId)
 
@@ -32,6 +35,7 @@ class RatingService(
         return ratingRepository.save(rating)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun removeRating(ratingRequestDTO: RatingRequestDTO) {
         val rating = ratingRepository.findByRatingAndComment_IdAndUser(
             rating = ratingRequestDTO.rating,

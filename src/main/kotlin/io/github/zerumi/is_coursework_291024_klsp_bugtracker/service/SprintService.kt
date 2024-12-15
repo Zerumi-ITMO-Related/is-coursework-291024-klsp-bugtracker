@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 import java.time.ZonedDateTime
 
 @Service
@@ -24,6 +26,7 @@ class SprintService(
 
     fun getById(id: Long?) = sprintRepository.getReferenceById(requireNotNull(id))
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun createSprint(sprintRequestDTO: SprintRequestDTO): Sprint {
         val sprint = Sprint(
             name = sprintRequestDTO.name,
@@ -36,6 +39,7 @@ class SprintService(
         return sprintRepository.save(sprint)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun updateSprint(sprintInfo: SprintInfo): Sprint {
         val sprintToUpdate = sprintRepository.getReferenceById(requireNotNull(sprintInfo.id))
 
@@ -46,8 +50,10 @@ class SprintService(
         return sprintRepository.save(sprintToUpdate)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun deleteSprint(sprintInfo: SprintInfo) = sprintRepository.deleteById(requireNotNull(sprintInfo.id))
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun linkSprintToEpic(sprintId: Long, epicId: Long): Sprint {
         val sprintToLinkWithEpic = sprintRepository.getReferenceById(sprintId)
         val epicToLinkWithSprint = epicRepository.getReferenceById(epicId)
@@ -59,6 +65,7 @@ class SprintService(
         return sprintRepository.save(sprintToLinkWithEpic)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun linkSprintToIssue(sprintId: Long, issueId: Long): Sprint {
         val sprintToLinkWithIssue = sprintRepository.getReferenceById(sprintId)
         val issueToLinkWithSprint = issueRepository.getReferenceById(issueId)
@@ -69,6 +76,7 @@ class SprintService(
         return sprintRepository.save(sprintToLinkWithIssue)
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     fun unlinkSprintFromIssue(sprintId: Long, issueId: Long): Sprint {
         val sprintToUnlinkWithIssue = sprintRepository.getReferenceById(sprintId)
         val issueToUnlinkWithSprint = issueRepository.getReferenceById(issueId)
