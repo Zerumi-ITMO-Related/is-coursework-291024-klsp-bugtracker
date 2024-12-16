@@ -26,8 +26,8 @@ import java.time.ZonedDateTime
 @Table(name = "CourseEvent", schema = "s367837")
 class Event(
     @Id @GeneratedValue @Column(name = "event_id") var id: Long? = null,
-    @Column(name = "event_name") var name: String,
-    @Column(name = "event_description") var description: String,
+    @Column(name = "event_name", columnDefinition = "text") var name: String,
+    @Column(name = "event_description", columnDefinition = "text") var description: String,
     @Column(name = "event_date") var date: ZonedDateTime,
     @Column(name = "event_review", nullable = true) var eventReview: String?,
     @ManyToMany @JoinTable(

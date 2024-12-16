@@ -17,8 +17,8 @@ import java.time.ZonedDateTime
 @Table(name = "CourseEpic", schema = "s367837")
 class Epic(
     @Id @GeneratedValue @Column(name = "epic_id") var id: Long? = null,
-    @Column(name = "epic_name") var name: String,
-    @Column(name = "epic_description") var description: String,
+    @Column(name = "epic_name", columnDefinition = "text") var name: String,
+    @Column(name = "epic_description", columnDefinition = "text") var description: String,
     @Column(name = "epic_deadline") var deadline: ZonedDateTime,
 
     @OneToMany(mappedBy = "relatedEpic") var sprints: MutableCollection<Sprint> = mutableListOf()

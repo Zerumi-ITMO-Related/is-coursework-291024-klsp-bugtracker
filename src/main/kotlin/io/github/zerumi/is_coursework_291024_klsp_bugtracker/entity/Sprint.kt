@@ -20,8 +20,8 @@ import java.time.ZonedDateTime
 @Table(name = "CourseSprint", schema = "s367837")
 class Sprint(
     @Id @GeneratedValue @Column(name = "sprint_id") var id: Long? = null,
-    @Column(name = "sprint_name") var name: String,
-    @Column(name = "sprint_description") var description: String,
+    @Column(name = "sprint_name", columnDefinition = "text") var name: String,
+    @Column(name = "sprint_description", columnDefinition = "text") var description: String,
     @Column(name = "sprint_created_at") var createdAt: ZonedDateTime,
     @Column(name = "sprint_deadline") var deadline: ZonedDateTime,
     @ManyToOne @JoinColumn(name = "epic_id") var relatedEpic: Epic,

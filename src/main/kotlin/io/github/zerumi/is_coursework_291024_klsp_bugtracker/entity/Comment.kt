@@ -30,7 +30,7 @@ class Comment(
     @Column(name = "created_at") var creationTime: ZonedDateTime,
     @Column(name = "last_modified_at") var lastModified: ZonedDateTime?,
     @ManyToOne @JoinColumn(name = "parent_comment", nullable = true) var parentComment: Comment?,
-    @Column(name = "content") var content: String,
+    @Column(name = "content", columnDefinition = "text") var content: String,
 
     @OneToMany(mappedBy = "parentComment") var subThread: MutableCollection<Comment> = mutableListOf(),
     @OneToMany(mappedBy = "relatedComment") var attachedFiles: MutableCollection<File> = mutableListOf(),

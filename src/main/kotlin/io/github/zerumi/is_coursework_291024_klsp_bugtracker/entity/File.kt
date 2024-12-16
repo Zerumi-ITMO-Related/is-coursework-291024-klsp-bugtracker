@@ -18,8 +18,8 @@ import java.time.ZonedDateTime
 @Table(name = "CourseFile", schema = "s367837")
 class File(
     @Id @GeneratedValue @Column(name = "file_id") var id: Long? = null,
-    @Column(name = "file_path") var filepath: String,
-    @Column(name = "file_mime_type") var mimeType: String,
+    @Column(name = "file_path", columnDefinition = "text") var filepath: String,
+    @Column(name = "file_mime_type", columnDefinition = "text") var mimeType: String,
     @Column(name = "file_upload_time") var uploadTime: ZonedDateTime,
     @ManyToOne @JoinColumn(name = "related_comment_id", nullable = true) var relatedComment: Comment? = null
 ) : Serializable
